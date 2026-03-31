@@ -1,0 +1,2303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sahamati — Interactive Wireframes v1.2</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,300;0,600;0,700;1,300;1,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1B3A6B;
+  --navy-light: #2A5298;
+  --teal: #0D7C7C;
+  --teal-light: #12A4A4;
+  --gold: #C49A2A;
+  --red: #D63B3B;
+  --green: #1A8754;
+  --orange: #D97706;
+  --bg: #F7F8FC;
+  --surface: #FFFFFF;
+  --border: #E2E6ED;
+  --text: #1A2540;
+  --text-2: #5A6680;
+  --text-3: #94A3B8;
+  --sidebar-w: 260px;
+  --header-h: 56px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; font-size: 14px; }
+
+/* ─── APP SHELL ─────────────────────────────────── */
+#sidebar {
+  width: var(--sidebar-w); min-height: 100vh; background: var(--navy);
+  display: flex; flex-direction: column; position: fixed; top: 0; left: 0;
+  z-index: 100; overflow-y: auto;
+}
+#sidebar-brand {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+#sidebar-brand .logo { font-family: 'Fraunces', serif; font-weight: 700; font-size: 22px; color: #fff; letter-spacing: -0.5px; }
+#sidebar-brand .tagline { font-size: 10px; color: rgba(255,255,255,0.45); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+
+.nav-group { padding: 12px 0 4px; }
+.nav-group-label { font-size: 10px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: rgba(255,255,255,0.35); padding: 0 16px 8px; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px; padding: 8px 16px;
+  color: rgba(255,255,255,0.65); cursor: pointer; font-size: 13px; font-weight: 400;
+  transition: all 0.15s; border-left: 3px solid transparent; user-select: none;
+}
+.nav-item:hover { background: rgba(255,255,255,0.07); color: #fff; }
+.nav-item.active { background: rgba(255,255,255,0.12); color: #fff; border-left-color: var(--teal-light); font-weight: 500; }
+.nav-item .icon { width: 16px; text-align: center; font-size: 14px; flex-shrink: 0; }
+.nav-badge { margin-left: auto; background: var(--red); color: #fff; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 10px; }
+.nav-badge.gold { background: var(--gold); }
+
+#main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+#topbar {
+  height: var(--header-h); background: #fff; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; padding: 0 28px; gap: 12px; position: sticky; top: 0; z-index: 50;
+}
+#topbar .screen-title { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; color: var(--text); flex: 1; }
+#topbar .journey-badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; }
+.badge-consumer { background: #EEF2FF; color: #4338CA; }
+.badge-admin { background: #F0FDF4; color: #166534; }
+.badge-dpo { background: #FFF7ED; color: #9A3412; }
+.badge-widget { background: #F0F9FF; color: #0369A1; }
+.badge-phase2 { background: #FDF4FF; color: #7E22CE; }
+.badge-phase3 { background: #FFF1F2; color: #9F1239; }
+
+#content { flex: 1; padding: 28px; overflow-y: auto; }
+
+/* ─── SCREEN BASE ───────────────────────────────── */
+.screen { display: none; animation: fadeIn 0.2s ease; }
+.screen.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ─── SHARED COMPONENTS ─────────────────────────── */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+.card + .card { margin-top: 16px; }
+.card-sm { padding: 16px; }
+.section-title { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 600; margin-bottom: 20px; color: var(--text); }
+.label { font-size: 11px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text-2); margin-bottom: 6px; }
+.field-group { margin-bottom: 16px; }
+input, select, textarea {
+  width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); background: #fff;
+  outline: none; transition: border-color 0.15s;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--teal); }
+textarea { resize: none; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px;
+  border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer;
+  border: none; transition: all 0.15s; font-family: 'DM Sans', sans-serif;
+}
+.btn-primary { background: var(--navy); color: #fff; }
+.btn-primary:hover { background: var(--navy-light); }
+.btn-teal { background: var(--teal); color: #fff; }
+.btn-teal:hover { background: var(--teal-light); }
+.btn-ghost { background: transparent; border: 1.5px solid var(--border); color: var(--text); }
+.btn-ghost:hover { background: var(--bg); }
+.btn-danger { background: #FEF2F2; color: var(--red); border: 1.5px solid #FCA5A5; }
+.btn-danger:hover { background: #FEE2E2; }
+.btn-sm { padding: 7px 14px; font-size: 13px; }
+.btn-lg { padding: 13px 28px; font-size: 15px; font-weight: 600; }
+.btn-full { width: 100%; justify-content: center; }
+
+.tag { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+.tag-green { background: #DCFCE7; color: var(--green); }
+.tag-red { background: #FEE2E2; color: var(--red); }
+.tag-orange { background: #FEF3C7; color: var(--orange); }
+.tag-blue { background: #DBEAFE; color: #1D4ED8; }
+.tag-purple { background: #EDE9FE; color: #6D28D9; }
+.tag-gray { background: #F1F5F9; color: var(--text-2); }
+.tag-navy { background: #EFF6FF; color: var(--navy); }
+.tag-teal { background: #CCFBF1; color: #0F766E; }
+
+.divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+.mono { font-family: 'DM Mono', monospace; }
+
+/* ─── STAT CARDS ─────────────────────────────────── */
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.stats-row-3 { grid-template-columns: repeat(3, 1fr); }
+.stat-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+.stat-card .stat-label { font-size: 12px; color: var(--text-2); font-weight: 500; margin-bottom: 8px; }
+.stat-card .stat-num { font-family: 'Fraunces', serif; font-size: 32px; font-weight: 600; color: var(--text); line-height: 1; }
+.stat-card .stat-sub { font-size: 12px; color: var(--text-3); margin-top: 6px; }
+.stat-card.highlight { border-color: var(--teal); background: linear-gradient(135deg, #F0FDFA 0%, #fff 100%); }
+
+/* ─── TABLE ──────────────────────────────────────── */
+.table-wrap { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { background: #F8FAFC; padding: 12px 16px; text-align: left; font-size: 11px; font-weight: 600; letter-spacing: 0.7px; text-transform: uppercase; color: var(--text-2); border-bottom: 1px solid var(--border); }
+td { padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text); }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #F8FAFC; }
+
+/* ─── TOGGLE SWITCH ──────────────────────────────── */
+.toggle-wrap { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.toggle { position: relative; width: 40px; height: 22px; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: #CBD5E1; border-radius: 22px; transition: 0.25s;
+}
+.toggle-slider:before {
+  content: ''; position: absolute; width: 16px; height: 16px;
+  left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.25s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+.toggle input:checked + .toggle-slider { background: var(--teal); }
+.toggle input:checked + .toggle-slider:before { transform: translateX(18px); }
+.toggle input:disabled + .toggle-slider { background: #94A3B8; opacity: 0.7; }
+
+/* ─── PROGRESS / STEPPER ─────────────────────────── */
+.stepper { display: flex; align-items: center; margin-bottom: 32px; }
+.step { display: flex; align-items: center; gap: 8px; }
+.step-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+.step-dot.done { background: var(--teal); color: #fff; }
+.step-dot.active { background: var(--navy); color: #fff; box-shadow: 0 0 0 3px rgba(27,58,107,0.2); }
+.step-dot.pending { background: var(--bg); border: 2px solid var(--border); color: var(--text-3); }
+.step-label { font-size: 12px; font-weight: 500; color: var(--text-2); }
+.step.active .step-label { color: var(--navy); font-weight: 600; }
+.step-line { flex: 1; height: 2px; background: var(--border); margin: 0 8px; }
+.step-line.done { background: var(--teal); }
+
+/* ─── ALERT BOXES ────────────────────────────────── */
+.alert { display: flex; gap: 12px; padding: 14px 16px; border-radius: 10px; margin-bottom: 16px; font-size: 13px; }
+.alert-info { background: #EFF6FF; border: 1px solid #BFDBFE; color: #1D4ED8; }
+.alert-warning { background: #FFFBEB; border: 1px solid #FDE68A; color: #92400E; }
+.alert-danger { background: #FEF2F2; border: 1px solid #FECACA; color: #991B1B; }
+.alert-success { background: #F0FDF4; border: 1px solid #BBF7D0; color: #166534; }
+.alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+/* ─── TIMELINE ───────────────────────────────────── */
+.timeline { position: relative; padding-left: 28px; }
+.timeline-item { position: relative; padding: 0 0 20px 20px; border-left: 2px solid var(--border); }
+.timeline-item:last-child { border-left-color: transparent; }
+.timeline-dot { position: absolute; left: -7px; top: 0; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff; }
+.timeline-time { font-size: 11px; color: var(--text-3); margin-bottom: 4px; font-family: 'DM Mono', monospace; }
+.timeline-title { font-weight: 500; font-size: 13px; color: var(--text); }
+.timeline-sub { font-size: 12px; color: var(--text-2); margin-top: 3px; }
+
+/* ─── SLA PROGRESS ───────────────────────────────── */
+.sla-bar-wrap { margin-top: 6px; }
+.sla-bar-track { height: 6px; background: var(--border); border-radius: 6px; overflow: hidden; }
+.sla-bar-fill { height: 100%; border-radius: 6px; transition: width 0.5s; }
+.sla-safe { background: var(--green); }
+.sla-warn { background: var(--orange); }
+.sla-danger { background: var(--red); }
+
+/* ─── 2-COL LAYOUT ───────────────────────────────── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.two-col-3-7 { display: grid; grid-template-columns: 3fr 7fr; gap: 20px; }
+.two-col-6-4 { display: grid; grid-template-columns: 6fr 4fr; gap: 20px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+
+/* ─── PHONE FRAME (iPhone 14 Pro simulation) ─────── */
+.phone-wrap { display: flex; justify-content: center; padding: 32px 0 24px; gap: 32px; flex-wrap: wrap; }
+.phone-outer {
+  position: relative;
+  width: 393px;
+  background: #1C1C1E;
+  border-radius: 52px;
+  padding: 11px;
+  box-shadow:
+    0 0 0 1px #0A0A0A,
+    0 50px 100px rgba(0,0,0,0.4),
+    0 20px 40px rgba(0,0,0,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    inset 0 -1px 0 rgba(0,0,0,0.5);
+  flex-shrink: 0;
+}
+/* Volume buttons */
+.phone-btn { position: absolute; background: #2C2C2E; border-radius: 2px 0 0 2px; width: 3px; }
+.phone-btn.vol-u { left: -3px; top: 130px; height: 34px; }
+.phone-btn.vol-d { left: -3px; top: 176px; height: 34px; }
+.phone-btn.mute  { left: -3px; top:  88px; height: 24px; }
+.phone-btn.power { right: -3px; top: 140px; height: 56px; border-radius: 0 2px 2px 0; }
+.phone-inner {
+  background: #ffffff;
+  border-radius: 42px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 820px;
+}
+/* Dynamic Island */
+.phone-island {
+  position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+  width: 126px; height: 36px; background: #000;
+  border-radius: 20px; z-index: 10;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.05);
+}
+/* Status bar with Dynamic Island clearance */
+.phone-status {
+  padding: 16px 28px 6px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 13px; font-weight: 600; min-height: 58px;
+  position: relative; z-index: 5;
+  background: var(--phone-bg, #fff);
+  color: var(--phone-status-color, #1C1C1E);
+}
+.phone-status-icons { display: flex; gap: 6px; align-items: center; font-size: 11px; }
+/* Scrollable phone body */
+.phone-body {
+  flex: 1; overflow-y: auto; overflow-x: hidden;
+  scrollbar-width: none; -ms-overflow-style: none;
+  background: var(--phone-bg, #F2F2F7);
+}
+.phone-body::-webkit-scrollbar { display: none; }
+/* Phone home bar */
+.phone-home { height: 28px; display: flex; align-items: center; justify-content: center; background: var(--phone-bg, #fff); flex-shrink: 0; }
+.phone-home::after { content: ''; width: 130px; height: 5px; background: rgba(0,0,0,0.18); border-radius: 3px; }
+
+/* Legacy alias — remove after migration */
+.mobile-frame-wrap { display: flex; justify-content: center; padding: 20px 0; }
+.mobile-frame {
+  width: 375px; background: #fff; border-radius: 40px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 8px var(--navy);
+  overflow: hidden; position: relative;
+}
+.mobile-frame .status-bar { background: var(--navy); padding: 14px 20px 8px; display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.8); font-weight: 500; }
+.mobile-body { padding: 20px; min-height: 580px; background: var(--bg); }
+.mobile-body .card { padding: 16px; margin-bottom: 12px; }
+
+/* PRD annotation */
+.prd-note { max-width:500px; margin:14px auto 0; background:#EFF6FF; border:1px solid #BFDBFE; border-radius:8px; padding:10px 14px; font-size:12px; color:#1D4ED8; display:flex; gap:8px; line-height:1.5; }
+.prd-ref { font-family:'DM Mono',monospace; font-weight:600; flex-shrink:0; }
+
+/* ─── FORM BUILDER SPECIFIC ──────────────────────── */
+.builder-layout { display: grid; grid-template-columns: 340px 1fr; gap: 0; height: calc(100vh - var(--header-h) - 56px); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.builder-sidebar { background: #fff; border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+.builder-preview { background: var(--bg); overflow-y: auto; }
+.builder-topbar { padding: 14px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; background: var(--navy); }
+.builder-topbar span { color: rgba(255,255,255,0.7); font-size: 13px; font-weight: 500; }
+.builder-topbar .active-view { color: #fff; font-weight: 600; background: rgba(255,255,255,0.12); padding: 3px 12px; border-radius: 20px; cursor: pointer; font-size: 13px; }
+
+.purpose-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--border); cursor: pointer; }
+.purpose-item:hover { background: #F8FAFC; }
+.purpose-item.selected { background: #EFF6FF; border-left: 3px solid var(--navy); }
+.purpose-item input[type=checkbox] { margin-top: 2px; accent-color: var(--navy); }
+.purpose-item .pi-content { flex: 1; }
+.purpose-item .pi-name { font-weight: 500; font-size: 13px; }
+.purpose-item .pi-type { font-size: 11px; color: var(--text-2); margin-top: 2px; }
+
+/* ─── CONSENT FORM PREVIEW ───────────────────────── */
+.consent-preview { padding: 24px; max-width: 480px; margin: 0 auto; }
+.consent-org-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+.org-avatar { width: 48px; height: 48px; border-radius: 12px; background: var(--navy); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; font-size: 18px; font-family: 'Fraunces', serif; }
+.consent-notice { background: #F0F9FF; border: 1px solid #BAE6FD; border-radius: 10px; padding: 16px; margin-bottom: 20px; font-size: 13px; line-height: 1.6; color: #0C4A6E; }
+.purpose-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); }
+.purpose-row:last-child { border-bottom: none; }
+.pr-info .pr-name { font-weight: 500; font-size: 14px; }
+.pr-info .pr-desc { font-size: 12px; color: var(--text-2); margin-top: 3px; }
+.pr-info .pr-meta { display: flex; gap: 8px; margin-top: 6px; }
+
+/* ─── HEALTH SCORE ───────────────────────────────── */
+.health-score-circle {
+  width: 160px; height: 160px; border-radius: 50%; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: conic-gradient(var(--green) 0deg 324deg, #E2E8F0 324deg);
+  margin: 0 auto 20px;
+}
+.health-score-inner {
+  width: 130px; height: 130px; border-radius: 50%; background: #fff;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.health-score-num { font-family: 'Fraunces', serif; font-size: 40px; font-weight: 700; color: var(--green); line-height: 1; }
+
+/* ─── RED FLAG SEVERITY ──────────────────────────── */
+.flag-critical { border-left: 4px solid var(--red); }
+.flag-high { border-left: 4px solid var(--orange); }
+.flag-medium { border-left: 4px solid var(--gold); }
+.flag-low { border-left: 4px solid var(--text-3); }
+
+/* ─── MINIMAP NAV (breadcrumb flow arrows) ───────── */
+.flow-nav { display: flex; align-items: center; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+.flow-step { font-size: 12px; padding: 4px 12px; background: #fff; border: 1px solid var(--border); border-radius: 20px; color: var(--text-2); cursor: pointer; transition: all 0.15s; }
+.flow-step:hover { border-color: var(--teal); color: var(--teal); }
+.flow-step.active { background: var(--navy); border-color: var(--navy); color: #fff; }
+.flow-arrow { color: var(--text-3); font-size: 12px; }
+
+/* ─── OTP INPUT ──────────────────────────────────── */
+.otp-input-group { display: flex; gap: 10px; justify-content: center; }
+.otp-box { width: 52px; height: 56px; text-align: center; font-size: 24px; font-weight: 600; font-family: 'DM Mono', monospace; border: 2px solid var(--border); border-radius: 10px; outline: none; }
+.otp-box:focus { border-color: var(--navy); background: #EFF6FF; }
+.otp-box.filled { border-color: var(--teal); background: #F0FDFA; color: var(--teal); }
+
+/* ─── VENDOR RISK HEATMAP ─────────────────────────── */
+.risk-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+.risk-cell { border-radius: 8px; padding: 12px 8px; text-align: center; cursor: pointer; transition: transform 0.15s; }
+.risk-cell:hover { transform: scale(1.05); }
+.risk-cell .rc-name { font-size: 11px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+.risk-cell .rc-score { font-family: 'DM Mono', monospace; font-size: 18px; font-weight: 600; color: #fff; }
+.risk-low { background: var(--green); }
+.risk-medium { background: var(--orange); }
+.risk-high { background: #DC6803; }
+.risk-critical { background: var(--red); }
+
+/* ─── IVR TRANSCRIPT ─────────────────────────────── */
+.ivr-wrap { background: #0F172A; border-radius: 12px; padding: 24px; font-family: 'DM Mono', monospace; font-size: 13px; color: #94A3B8; line-height: 1.8; }
+.ivr-system { color: #38BDF8; }
+.ivr-consumer { color: #4ADE80; }
+.ivr-note { color: #64748B; font-size: 11px; }
+
+/* ─── WIDGET EMBED ───────────────────────────────── */
+.code-block { background: #0F172A; border-radius: 10px; padding: 20px; font-family: 'DM Mono', monospace; font-size: 13px; line-height: 1.7; overflow-x: auto; }
+.code-block .kw { color: #7DD3FC; }
+.code-block .str { color: #86EFAC; }
+.code-block .fn { color: #FDE68A; }
+.code-block .cm { color: #64748B; }
+
+/* ─── ANNOTATION ─────────────────────────────────── */
+.annotation { position: relative; }
+.ann-tag { background: var(--gold); color: #fff; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; display: inline-block; margin-bottom: 4px; }
+
+/* ─── MINI CHART ─────────────────────────────────── */
+.sparkline { display: flex; align-items: flex-end; gap: 4px; height: 48px; }
+.spark-bar { flex: 1; border-radius: 4px 4px 0 0; min-width: 6px; background: var(--teal); opacity: 0.6; }
+.spark-bar.peak { opacity: 1; }
+
+/* ─── SCROLLBAR ──────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+</style>
+</head>
+<body>
+
+<!-- ─── SIDEBAR ─────────────────────────────────── -->
+<nav id="sidebar">
+  <div id="sidebar-brand">
+    <div class="logo">Sahamati</div>
+    <div class="tagline">Wireframes v1.2 — All Epics</div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">🧾 Consent Form (E-01, E-09)</div>
+    <div class="nav-item" onclick="go('widget-notice')"><span class="icon">📋</span>Notice & Plain Language</div>
+    <div class="nav-item" onclick="go('widget-purposes')"><span class="icon">✅</span>Purpose Selection</div>
+    <div class="nav-item" onclick="go('widget-channels')"><span class="icon">📡</span>Channel Selection</div>
+    <div class="nav-item" onclick="go('widget-review')"><span class="icon">👁</span>Review & Confirm</div>
+    <div class="nav-item" onclick="go('widget-success')"><span class="icon">🎉</span>Success State</div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">👤 Consumer Portal (E-02, E-03)</div>
+    <div class="nav-item" onclick="go('c-login')"><span class="icon">🔑</span>Login (OTP)</div>
+    <div class="nav-item" onclick="go('c-otp')"><span class="icon">🔢</span>OTP Entry <span class="nav-badge" style="background:var(--teal);">NEW</span></div>
+    <div class="nav-item" onclick="go('c-dashboard')"><span class="icon">🏠</span>Dashboard</div>
+    <div class="nav-item" onclick="go('c-consents')"><span class="icon">📂</span>My Consents</div>
+    <div class="nav-item" onclick="go('c-withdraw')"><span class="icon">↩</span>Withdrawal Flow</div>
+    <div class="nav-item" onclick="go('c-rights')"><span class="icon">⚖️</span>Data Rights Request</div>
+    <div class="nav-item" onclick="go('c-tracker')"><span class="icon">📍</span>Request Tracker</div>
+    <div class="nav-item" onclick="go('c-prefs')"><span class="icon">⚙️</span>Preferences</div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">🏢 Org Admin (E-06, E-01)</div>
+    <div class="nav-item" onclick="go('org-signup')"><span class="icon">✍️</span>Org Signup</div>
+    <div class="nav-item" onclick="go('org-wizard')"><span class="icon">🧙</span>Setup Wizard</div>
+    <div class="nav-item" onclick="go('org-dashboard')"><span class="icon">📊</span>Analytics Dashboard</div>
+    <div class="nav-item" onclick="go('form-builder')"><span class="icon">🛠</span>Consent Form Builder</div>
+    <div class="nav-item" onclick="go('purpose-registry')"><span class="icon">📚</span>Purpose Registry</div>
+    <div class="nav-item" onclick="go('batch-ops')"><span class="icon">⚡</span>Batch Operations</div>
+    <div class="nav-item" onclick="go('api-keys')"><span class="icon">🔐</span>API Keys & RBAC</div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">🛡 DPO Portal (E-04–E-08, E-13)</div>
+    <div class="nav-item" onclick="go('dpo-dashboard')"><span class="icon">🎯</span>DPO Dashboard</div>
+    <div class="nav-item" onclick="go('red-flags')"><span class="icon">🚩</span>Red Flag Queue <span class="nav-badge">4</span></div>
+    <div class="nav-item" onclick="go('red-flag-detail')"><span class="icon">🔍</span>Flag Detail</div>
+    <div class="nav-item" onclick="go('processors')"><span class="icon">🏭</span>Processor Registry</div>
+    <div class="nav-item" onclick="go('dpa-lifecycle')"><span class="icon">📝</span>DPA Lifecycle</div>
+    <div class="nav-item" onclick="go('audit-trail')"><span class="icon">🗃</span>Audit Trail</div>
+    <div class="nav-item" onclick="go('audit-log-detail')"><span class="icon">🔎</span>Audit Log Event Detail <span class="nav-badge" style="background:var(--teal);">NEW</span></div>
+    <div class="nav-item" onclick="go('rights-queue')"><span class="icon">📬</span>Rights Queue <span class="nav-badge gold">3</span></div>
+    <div class="nav-item" onclick="go('dpo-4eyes')"><span class="icon">👥</span>4-Eyes Approval</div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">🌐 Multi-Channel (E-11)</div>
+    <div class="nav-item" onclick="go('sms-flow')"><span class="icon">💬</span>SMS Consent (Mobile)</div>
+    <div class="nav-item" onclick="go('ivr-flow')"><span class="icon">📞</span>IVR Transcript</div>
+    <div class="nav-item" onclick="go('whatsapp-flow')"><span class="icon">🟢</span>WhatsApp Flow</div>
+    <div class="nav-item" onclick="go('branch-flow')"><span class="icon">🏦</span>In-Branch Tablet</div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">📈 Analytics (E-05, E-12)</div>
+    <div class="nav-item" onclick="go('health-score')"><span class="icon">💚</span>Consent Health Score</div>
+    <div class="nav-item" onclick="go('compliance-report')"><span class="icon">📄</span>DPDPA Annual Report</div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">🤖 Phase 3 — AI (E-15–E-19)</div>
+    <div class="nav-item" onclick="go('ai-recommendations')"><span class="icon">✨</span>AI Form Recommendations</div>
+    <div class="nav-item" onclick="go('enforcement-api')"><span class="icon">⚡</span>Enforcement Dashboard</div>
+    <div class="nav-item" onclick="go('vendor-risk')"><span class="icon">🗺</span>Vendor Risk Heatmap</div>
+    <div class="nav-item" onclick="go('minor-consent')"><span class="icon">👧</span>Minor Consent Verification</div>
+    <div class="nav-item" onclick="go('anomaly-detection')"><span class="icon">🔬</span>Anomaly Detection</div>
+  </div>
+</nav>
+
+<!-- ─── MAIN ─────────────────────────────────────── -->
+<div id="main">
+  <div id="topbar">
+    <div class="screen-title" id="screen-label">Select a screen from the sidebar</div>
+    <div id="journey-badge" class="journey-badge badge-widget"></div>
+    <div style="font-size:12px;color:var(--text-3)">Sahamati PRD v1.2 · All 19 Epics</div>
+  </div>
+  <div id="content">
+
+<!-- ═══════════════════════════════════════════════════════════════
+   WIDGET / CONSENT FORM SCREENS
+═══════════════════════════════════════════════════════════════ -->
+
+<div id="screen-widget-notice" class="screen">
+  <div class="phone-wrap">
+    <div class="phone-outer">
+      <div class="phone-btn mute"></div>
+      <div class="phone-btn vol-u"></div>
+      <div class="phone-btn vol-d"></div>
+      <div class="phone-btn power"></div>
+      <div class="phone-inner" style="--phone-bg:#0D7C7C;">
+        <div class="phone-island"></div>
+        <div class="phone-status" style="color:rgba(255,255,255,0.9);background:var(--teal);">
+          <span>9:41</span>
+          <div class="phone-status-icons">●●●● WiFi <span>🔋</span></div>
+        </div>
+        <div class="phone-body" style="background:#fff;">
+          <div style="background:var(--navy);padding:18px 20px 20px;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="width:42px;height:42px;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;">🏦</div>
+              <div>
+                <div style="color:#fff;font-weight:600;font-size:15px;">HDFC Bank</div>
+                <div style="color:rgba(255,255,255,0.6);font-size:11px;">Consent Notice · DPDPA 2023</div>
+              </div>
+              <div style="margin-left:auto;">
+                <button style="background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:12px;padding:5px 10px;border-radius:6px;cursor:pointer;font-weight:500;">हिंदी</button>
+              </div>
+            </div>
+          </div>
+          <div style="padding:20px;">
+            <div style="font-weight:700;font-size:15px;margin-bottom:10px;color:var(--navy);">Before we proceed 🙏</div>
+            <div style="font-size:13px;line-height:1.7;color:var(--text-2);margin-bottom:16px;">
+              HDFC Bank collects and processes your personal data for the purposes listed below. You have the right to consent to some or all of these, and to withdraw at any time.
+            </div>
+            <div style="background:#F8FAFC;border-radius:10px;padding:14px;margin-bottom:16px;">
+              <div style="font-size:12px;color:var(--text-2);line-height:1.8;">
+                <div><strong style="color:var(--text);">📋 Data collected:</strong> Name, PAN, Aadhaar, income, contact</div>
+                <div><strong style="color:var(--text);">⏱ Duration:</strong> Up to 7 years (RBI mandate)</div>
+                <div><strong style="color:var(--text);">🤝 Shared with:</strong> CIBIL, MCA, Razorpay</div>
+              </div>
+            </div>
+            <button onclick="go('widget-notice')" style="width:100%;background:#F1F5F9;border:none;padding:10px;border-radius:8px;font-size:13px;display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:12px;">
+              🔊 <span>Listen to this notice (Sarvam AI TTS)</span>
+            </button>
+            <div style="font-size:10px;color:var(--text-3);text-align:center;margin-bottom:16px;">Powered by Sahamati · DPDPA 2023 §6 Compliant</div>
+            <button class="btn btn-teal btn-full btn-lg" onclick="go('widget-purposes')" style="border-radius:12px;">Review Consent Choices →</button>
+          </div>
+        </div>
+        <div class="phone-home" style="background:#fff;"></div>
+      </div>
+    </div>
+  </div>
+  <div class="prd-note">
+    <span class="prd-ref">E-01 §3.1.3, E-09</span>
+    <span>Consent form Notice screen — plain language, TTS button (Sarvam AI), language switcher (EN/HI Phase 1). Loads on form_id resolution. DPDPA §6 notice requirement. Click "Review Consent Choices →" to proceed.</span>
+  </div>
+</div>
+
+<div id="screen-widget-purposes" class="screen">
+  <div class="phone-wrap">
+    <div class="phone-outer">
+      <div class="phone-btn mute"></div><div class="phone-btn vol-u"></div><div class="phone-btn vol-d"></div><div class="phone-btn power"></div>
+      <div class="phone-inner">
+        <div class="phone-island"></div>
+        <div class="phone-status"><span>9:41</span><div class="phone-status-icons">●●●● WiFi 🔋</div></div>
+        <div class="phone-body" style="padding:16px 18px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <span style="font-weight:700;font-size:16px;">Your Consent Choices</span>
+            <span style="font-size:12px;color:var(--text-2);">Step 2 of 4</span>
+          </div>
+          <div style="height:4px;background:var(--border);border-radius:4px;margin-bottom:16px;"><div style="height:100%;width:50%;background:var(--teal);border-radius:4px;"></div></div>
+
+          <!-- Statutory purposes (locked) -->
+          <div style="background:#EEF2FF;border-radius:8px;padding:9px 12px;margin-bottom:10px;font-size:11px;color:#4338CA;display:flex;align-items:center;gap:6px;">🔒 <strong>Statutory</strong> — Required by law · Cannot be removed</div>
+          <div class="card card-sm" style="margin-bottom:8px;border-left:3px solid #4338CA;">
+            <div style="display:flex;align-items:flex-start;gap:10px;">
+              <div style="flex:1;"><div style="font-size:13px;font-weight:500;">KYC Verification</div><div style="font-size:11px;color:var(--text-2);">Identity verification · RBI mandate</div><div style="display:flex;gap:4px;margin-top:4px;"><span class="tag tag-navy" style="font-size:10px;">Statutory</span><span class="tag tag-gray" style="font-size:10px;">3 years</span></div></div>
+              <label class="toggle"><input type="checkbox" checked disabled><div class="toggle-slider"></div></label>
+            </div>
+          </div>
+
+          <!-- Business purposes (pre-checked, removable with warning) — F-014 fix -->
+          <div style="background:#FFF7ED;border-radius:8px;padding:9px 12px;margin-bottom:10px;font-size:11px;color:#9A3412;display:flex;align-items:center;gap:6px;">⚠️ <strong>Business</strong> — Pre-selected · You may remove with service impact</div>
+          <div class="card card-sm" style="margin-bottom:8px;border-left:3px solid var(--orange);" id="loan-card">
+            <div style="display:flex;align-items:flex-start;gap:10px;">
+              <div style="flex:1;"><div style="font-size:13px;font-weight:500;">Loan Processing</div><div style="font-size:11px;color:var(--text-2);">Required to evaluate &amp; process your loan</div><div style="display:flex;gap:4px;margin-top:4px;"><span class="tag tag-orange" style="font-size:10px;">Business</span><span class="tag tag-gray" style="font-size:10px;">7 years</span></div></div>
+              <label class="toggle"><input type="checkbox" checked id="loan-toggle" onchange="document.getElementById('loan-warn').style.display=this.checked?'none':'flex'"><div class="toggle-slider"></div></label>
+            </div>
+            <div id="loan-warn" style="display:none;background:#FEF3C7;border-radius:6px;padding:8px 10px;margin-top:8px;font-size:11px;color:#92400E;align-items:center;gap:6px;">⚠️ Removing this purpose means HDFC Bank <strong>cannot process your loan application</strong>.</div>
+          </div>
+
+          <!-- Optional purposes -->
+          <div style="background:#F0FDF4;border-radius:8px;padding:9px 12px;margin-bottom:10px;font-size:11px;color:#166534;display:flex;align-items:center;gap:6px;">✅ <strong>Optional</strong> — Your choice, no service impact if declined</div>
+          <div class="card card-sm" style="margin-bottom:8px;">
+            <div style="display:flex;align-items:flex-start;gap:10px;">
+              <div style="flex:1;"><div style="font-size:13px;font-weight:500;">Marketing Offers</div><div style="font-size:11px;color:var(--text-2);">Personalised offers via SMS &amp; email</div><div style="display:flex;gap:4px;margin-top:4px;"><span class="tag tag-purple" style="font-size:10px;">Marketing</span><span class="tag tag-gray" style="font-size:10px;">1 year</span></div></div>
+              <label class="toggle"><input type="checkbox"><div class="toggle-slider"></div></label>
+            </div>
+          </div>
+          <div class="card card-sm" style="margin-bottom:14px;">
+            <div style="display:flex;align-items:flex-start;gap:10px;">
+              <div style="flex:1;"><div style="font-size:13px;font-weight:500;">Credit Analytics</div><div style="font-size:11px;color:var(--text-2);">Improve credit decisions using usage patterns</div><div style="display:flex;gap:4px;margin-top:4px;"><span class="tag tag-blue" style="font-size:10px;">Analytics</span><span class="tag tag-gray" style="font-size:10px;">2 years</span></div></div>
+              <label class="toggle"><input type="checkbox"><div class="toggle-slider"></div></label>
+            </div>
+          </div>
+          <button class="btn btn-teal btn-full btn-lg" onclick="go('widget-channels')" style="border-radius:12px;">Continue to Channels →</button>
+          <button class="btn btn-ghost btn-full" style="margin-top:8px;font-size:13px;" onclick="go('widget-notice')">← Back</button>
+        </div>
+        <div class="phone-home"></div>
+      </div>
+    </div>
+  </div>
+  <div class="prd-note">
+    <span class="prd-ref">E-01 §3.1.1</span>
+    <span>Purpose Selection — Statutory locked (disabled toggle). Business purposes pre-checked but removable with service-impact warning toast (F-014 fix). Optional unchecked by default. DPDPA §6. "Continue →" navigates to widget-channels.</span>
+  </div>
+</div>
+
+<div id="screen-widget-channels" class="screen">
+  <div class="phone-wrap">
+    <div class="phone-outer">
+      <div class="phone-btn mute"></div><div class="phone-btn vol-u"></div><div class="phone-btn vol-d"></div><div class="phone-btn power"></div>
+      <div class="phone-inner">
+        <div class="phone-island"></div>
+        <div class="phone-status"><span>9:41</span><div class="phone-status-icons">●●●● WiFi 🔋</div></div>
+        <div class="phone-body" style="padding:18px 20px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <span style="font-weight:700;font-size:16px;">Communication Channels</span>
+            <span style="font-size:12px;color:var(--text-2);">Step 3 of 4</span>
+          </div>
+          <div style="height:4px;background:var(--border);border-radius:4px;margin-bottom:16px;"><div style="height:100%;width:75%;background:var(--teal);border-radius:4px;"></div></div>
+          <p style="font-size:13px;color:var(--text-2);margin-bottom:16px;">Choose how HDFC Bank can contact you about your consented purposes.</p>
+          ${[['📧','Email','a**@gmail.com',true],['📱','SMS','+91 98765 XXXXX',true],['💬','WhatsApp','+91 98765 XXXXX',true],['📲','App Notifications','HDFC Bank app',false],['📞','Phone Calls','Voice only',false]].map(([icon,ch,sub,checked])=>`
+          <div class="card card-sm" style="margin-bottom:8px;display:flex;align-items:center;gap:12px;">
+            <span style="font-size:20px;">${icon}</span>
+            <div style="flex:1;"><div style="font-size:13px;font-weight:500;">${ch}</div><div style="font-size:11px;color:var(--text-3);">${sub}</div></div>
+            <label class="toggle"><input type="checkbox" ${checked?'checked':''}><div class="toggle-slider"></div></label>
+          </div>`).join('')}
+          <div style="font-size:11px;color:var(--text-3);margin:12px 0 16px;text-align:center;">Update preferences anytime from my.sahamati.in</div>
+          <button class="btn btn-teal btn-full btn-lg" onclick="go('widget-review')" style="border-radius:12px;">Review & Confirm →</button>
+          <button class="btn btn-ghost btn-full" style="margin-top:8px;font-size:13px;" onclick="go('widget-purposes')">← Back</button>
+        </div>
+        <div class="phone-home"></div>
+      </div>
+    </div>
+  </div>
+  <div class="prd-note"><span class="prd-ref">E-01 §3.1</span><span>Channel selection step. Each channel independently toggleable. Email/SMS/WhatsApp pre-selected. App/Phone unchecked by default. "Review & Confirm →" goes to widget-review.</span></div>
+</div>
+
+<div id="screen-widget-review" class="screen">
+  <div class="phone-wrap">
+    <div class="phone-outer">
+      <div class="phone-btn mute"></div><div class="phone-btn vol-u"></div><div class="phone-btn vol-d"></div><div class="phone-btn power"></div>
+      <div class="phone-inner">
+        <div class="phone-island"></div>
+        <div class="phone-status"><span>9:41</span><div class="phone-status-icons">●●●● WiFi 🔋</div></div>
+        <div class="phone-body" style="padding:18px 20px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <span style="font-weight:700;font-size:16px;">Review & Confirm</span>
+            <span style="font-size:12px;color:var(--text-2);">Step 4 of 4</span>
+          </div>
+          <div style="height:4px;background:var(--teal);border-radius:4px;margin-bottom:18px;"></div>
+          <div class="card card-sm" style="margin-bottom:12px;">
+            <div class="label">Consenting to</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
+              <span class="tag tag-navy">✓ KYC Verification</span>
+              <span class="tag tag-navy">✓ Loan Processing</span>
+            </div>
+            <div style="font-size:11px;color:var(--text-3);margin-top:8px;">Marketing Offers — Not selected</div>
+          </div>
+          <div class="card card-sm" style="margin-bottom:12px;">
+            <div class="label">Via channels</div>
+            <div style="font-size:13px;margin-top:6px;">📧 Email &nbsp; 📱 SMS &nbsp; 💬 WhatsApp</div>
+          </div>
+          <div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:10px;padding:14px;margin-bottom:18px;">
+            <div style="font-size:12px;color:#92400E;line-height:1.7;">By confirming, you give HDFC Bank explicit consent under <strong>DPDPA 2023 §6</strong>. You can withdraw any time at <strong>my.sahamati.in</strong></div>
+          </div>
+          <button class="btn btn-teal btn-full btn-lg" onclick="go('widget-success')" style="border-radius:12px;">✅ Confirm Consent</button>
+          <button class="btn btn-ghost btn-full" style="margin-top:8px;font-size:13px;" onclick="go('widget-channels')">← Edit choices</button>
+        </div>
+        <div class="phone-home"></div>
+      </div>
+    </div>
+  </div>
+  <div class="prd-note"><span class="prd-ref">E-01 §3.1.3</span><span>Review screen showing purposes + channels selected. DPDPA §6 declaration in amber box. "Confirm Consent" → widget-success. "Edit choices" → widget-channels.</span></div>
+</div>
+
+<div id="screen-widget-success" class="screen">
+  <div class="phone-wrap">
+    <div class="phone-outer">
+      <div class="phone-btn mute"></div><div class="phone-btn vol-u"></div><div class="phone-btn vol-d"></div><div class="phone-btn power"></div>
+      <div class="phone-inner">
+        <div class="phone-island"></div>
+        <div class="phone-status" style="background:var(--green);color:#fff;"><span>9:41</span><div class="phone-status-icons">●●●● WiFi 🔋</div></div>
+        <div class="phone-body" style="background:#F0FDF4;display:flex;flex-direction:column;align-items:center;padding:40px 24px;text-align:center;">
+          <div style="width:100px;height:100px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:46px;margin-bottom:24px;box-shadow:0 0 0 16px rgba(26,135,84,0.15);">✓</div>
+          <div style="font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--text);margin-bottom:8px;">Consent Recorded!</div>
+          <div style="font-size:14px;color:var(--text-2);margin-bottom:28px;line-height:1.6;">Your choices are securely stored.<br>HDFC Bank's systems are updated.</div>
+          <div style="background:#fff;border-radius:12px;padding:16px;width:100%;text-align:left;margin-bottom:24px;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--text-3);letter-spacing:0.8px;margin-bottom:6px;">Reference Number</div>
+            <div style="font-family:'DM Mono',monospace;font-size:15px;color:var(--navy);margin-bottom:4px;">CNS-2026-HD-00247</div>
+            <div style="font-size:11px;color:var(--text-3);">12 Mar 2026 · 09:41 IST · Web · v2.1</div>
+          </div>
+          <div style="font-size:12px;color:var(--text-2);margin-bottom:24px;">Confirmation sent to<br>📱 +91 98765 XXXXX &nbsp; 📧 a**@gmail.com</div>
+          <button class="btn btn-ghost btn-full" onclick="go('c-dashboard')" style="background:#fff;">Manage in Sahamati Portal →</button>
+        </div>
+        <div class="phone-home" style="background:#F0FDF4;"></div>
+      </div>
+    </div>
+  </div>
+  <div class="prd-note"><span class="prd-ref">E-01 §3.1.3</span><span>Success state. Checkmark animation (SVG path, 800ms). Reference number (CNS- format). Masked confirmation channels. "Manage in Sahamati Portal →" navigates to c-dashboard. US-003.</span></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+   CONSUMER PORTAL SCREENS
+═══════════════════════════════════════════════════════════════ -->
+
+<div id="screen-c-login" class="screen">
+  <div class="phone-wrap">
+    <div class="phone-outer">
+      <div class="phone-btn mute"></div><div class="phone-btn vol-u"></div><div class="phone-btn vol-d"></div><div class="phone-btn power"></div>
+      <div class="phone-inner">
+        <div class="phone-island"></div>
+        <div class="phone-status"><span>9:41</span><div class="phone-status-icons">●●●● WiFi 🔋</div></div>
+        <div class="phone-body" style="background:#fff;padding:32px 24px;">
+          <div style="text-align:center;margin-bottom:36px;">
+            <div style="font-family:'Fraunces',serif;font-size:30px;font-weight:700;color:var(--navy);">Sahamati</div>
+            <div style="font-size:12px;color:var(--text-3);letter-spacing:0.5px;margin-top:3px;">Your Privacy Control Centre</div>
+          </div>
+          <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--navy),var(--teal));display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 20px;"></div>
+          <div style="font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;">Welcome back</div>
+          <div style="font-size:13px;color:var(--text-2);text-align:center;margin-bottom:28px;">No password needed — we'll send a code.</div>
+          <div style="margin-bottom:12px;">
+            <div style="display:flex;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;">
+              <span style="background:#F8FAFC;padding:11px 14px;font-size:13px;font-weight:600;color:var(--text-2);border-right:1.5px solid var(--border);">+91</span>
+              <input placeholder="Mobile number" value="98765 43210" style="border:none;border-radius:0;flex:1;padding:11px 14px;font-size:14px;">
+            </div>
+          </div>
+          <div style="text-align:center;margin-bottom:16px;font-size:12px;color:var(--text-3);">or <a href="#" onclick="return false;" style="color:var(--teal);text-decoration:none;">use email instead</a></div>
+          <button class="btn btn-teal btn-full btn-lg" onclick="go('c-otp')" style="border-radius:12px;margin-bottom:20px;">Send OTP →</button>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+            <div style="flex:1;height:1px;background:var(--border);"></div>
+            <span style="font-size:12px;color:var(--text-3);">Top right</span>
+            <div style="flex:1;height:1px;background:var(--border);"></div>
+          </div>
+          <div style="display:flex;justify-content:center;gap:8px;">
+            <button style="width:32px;height:32px;border-radius:6px;border:1px solid var(--border);background:#fff;font-size:16px;cursor:pointer;" title="English">A</button>
+            <button style="width:32px;height:32px;border-radius:6px;border:1px solid var(--border);background:#fff;font-size:16px;cursor:pointer;" title="Hindi">अ</button>
+          </div>
+          <div style="font-size:10px;color:var(--text-3);text-align:center;margin-top:20px;">Session secured · OTP valid 10 minutes · Max 3 attempts</div>
+        </div>
+        <div class="phone-home"></div>
+      </div>
+    </div>
+  </div>
+  <div class="prd-note">
+    <span class="prd-ref">E-02 §3.1</span>
+    <span>Passwordless OTP login. +91 prefix, Indian mobile format. Language switcher EN|HI (top-right). "Send OTP →" navigates to OTP Entry screen (c-otp). First-time users continue to registration after OTP. US-101.</span>
+  </div>
+</div>
+
+<!-- OTP ENTRY (NEW — was missing, F-001) -->
+<div id="screen-c-otp" class="screen">
+  <div class="phone-wrap">
+    <div class="phone-outer">
+      <div class="phone-btn mute"></div><div class="phone-btn vol-u"></div><div class="phone-btn vol-d"></div><div class="phone-btn power"></div>
+      <div class="phone-inner">
+        <div class="phone-island"></div>
+        <div class="phone-status"><span>9:41</span><div class="phone-status-icons">●●●● WiFi 🔋</div></div>
+        <div class="phone-body" style="background:#fff;padding:32px 24px;">
+          <button onclick="go('c-login')" style="background:none;border:none;color:var(--text-2);font-size:14px;cursor:pointer;margin-bottom:28px;display:flex;align-items:center;gap:6px;">← Back</button>
+          <div style="font-family:'Fraunces',serif;font-size:24px;font-weight:700;margin-bottom:8px;">Enter OTP</div>
+          <div style="font-size:13px;color:var(--text-2);margin-bottom:28px;">Code sent to <strong>+91 98765 XXXXX</strong><br>Valid for <strong style="color:var(--teal);">9:42</strong></div>
+          <!-- 6-digit OTP boxes -->
+          <div style="display:flex;gap:10px;justify-content:center;margin-bottom:28px;">
+            ${[1,2,3,4,5,6].map((n,i)=>`<div style="width:46px;height:54px;border:2px solid ${i<4?'var(--navy)':'var(--border)'};border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--navy);">${i<4?[8,3,2,1,'',''][i]:''}</div>`).join('')}
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+            <div style="font-size:12px;color:var(--text-3);">Attempt 1 of 3</div>
+            <button style="background:none;border:none;color:var(--teal);font-size:13px;cursor:pointer;font-weight:500;">Resend OTP</button>
+          </div>
+          <button class="btn btn-teal btn-full btn-lg" onclick="go('c-dashboard')" style="border-radius:12px;">Verify →</button>
+          <div style="background:#FEF3C7;border:1px solid #FDE68A;border-radius:8px;padding:12px;margin-top:20px;font-size:12px;color:#92400E;">
+            🔒 After 3 wrong attempts, access is locked for <strong>15 minutes</strong>
+          </div>
+        </div>
+        <div class="phone-home"></div>
+      </div>
+    </div>
+  </div>
+  <div class="prd-note">
+    <span class="prd-ref">E-02 §3.1</span>
+    <span>OTP Entry — 6 individual digit boxes, 10-min countdown timer, attempt counter (1 of 3), resend button. 15-min lockout after 3 failures. "Verify →" navigates to Dashboard (c-dashboard). Previously missing — F-001 fix.</span>
+  </div>
+</div>
+
+<div id="screen-c-dashboard" class="screen">
+  <div class="phone-wrap">
+    <div class="phone-outer">
+      <div class="phone-btn mute"></div><div class="phone-btn vol-u"></div><div class="phone-btn vol-d"></div><div class="phone-btn power"></div>
+      <div class="phone-inner">
+        <div class="phone-island"></div>
+        <div class="phone-status" style="background:var(--navy);color:#fff;"><span>9:41</span><div class="phone-status-icons">●●●● WiFi 🔋</div></div>
+        <div class="phone-body" style="background:var(--bg);">
+          <!-- Header -->
+          <div style="background:var(--navy);padding:16px 20px 20px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+              <div>
+                <div style="color:rgba(255,255,255,0.6);font-size:12px;">Good morning</div>
+                <div style="color:#fff;font-weight:700;font-size:18px;font-family:'Fraunces',serif;">Priya Sharma</div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:center;">
+                <div style="position:relative;cursor:pointer;" onclick="go('c-prefs')">
+                  <div style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:18px;">🔔</div>
+                  <div style="position:absolute;top:-2px;right:-2px;width:10px;height:10px;background:var(--red);border-radius:50%;border:2px solid var(--navy);"></div>
+                </div>
+                <div style="width:34px;height:34px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;" onclick="go('c-prefs')">PS</div>
+              </div>
+            </div>
+            <!-- Quick stats -->
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+              ${[['7','Active Consents','✅'],['2','Expiring Soon','⏱'],['1','Rights Pending','📋']].map(([n,l,i])=>`
+              <div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:12px 8px;text-align:center;">
+                <div style="font-size:20px;font-weight:700;color:#fff;">${n}</div>
+                <div style="font-size:10px;color:rgba(255,255,255,0.65);margin-top:2px;">${i} ${l}</div>
+              </div>`).join('')}
+            </div>
+          </div>
+          <!-- Quick actions -->
+          <div style="padding:16px 16px 0;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-3);letter-spacing:0.8px;margin-bottom:10px;">Quick Actions</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+              ${[['📂','My Consents','c-consents'],['⚖️','Data Rights','c-rights'],['📍','Tracker','c-tracker'],['⚙️','Preferences','c-prefs']].map(([i,l,s])=>`
+              <div onclick="go('${s}')" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px 12px;cursor:pointer;display:flex;align-items:center;gap:10px;">
+                <span style="font-size:20px;">${i}</span>
+                <span style="font-size:13px;font-weight:500;">${l}</span>
+              </div>`).join('')}
+            </div>
+            <!-- Recent activity -->
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-3);letter-spacing:0.8px;margin-bottom:10px;">Recent Activity</div>
+            ${[
+              {icon:'↩',color:'var(--orange)',title:'Withdrew marketing consent from HDFC Bank','time':'2 days ago'},
+              {icon:'🔔',color:'var(--navy)',title:'ICICI Bank consent expiring in 28 days','time':'7 days ago'},
+              {icon:'📋',color:'var(--teal)',title:'Data access request acknowledged by LIC','time':'12 days ago'},
+            ].map(e=>`
+            <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:#fff;border-radius:10px;margin-bottom:8px;">
+              <div style="width:32px;height:32px;border-radius:8px;background:${e.color}20;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">${e.icon}</div>
+              <div><div style="font-size:13px;">${e.title}</div><div style="font-size:11px;color:var(--text-3);margin-top:2px;">${e.time}</div></div>
+            </div>`).join('')}
+          </div>
+          <div style="height:20px;"></div>
+        </div>
+        <!-- Bottom nav -->
+        <div style="background:#fff;border-top:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr 1fr 1fr;padding:8px 0 4px;">
+          ${[['🏠','Home','c-dashboard',true],['📂','Consents','c-consents',false],['⚖️','Rights','c-rights',false],['⚙️','Settings','c-prefs',false]].map(([i,l,s,a])=>`
+          <div onclick="go('${s}')" style="display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px 0;">
+            <span style="font-size:20px;">${i}</span>
+            <span style="font-size:10px;font-weight:${a?'700':'400'};color:${a?'var(--navy)':'var(--text-3)'};">${l}</span>
+          </div>`).join('')}
+        </div>
+        <div class="phone-home"></div>
+      </div>
+    </div>
+  </div>
+  <div class="prd-note"><span class="prd-ref">E-02 §4.1</span><span>Consumer Dashboard — nav header with avatar + notification bell (F-013 fix). 3 KPI hero cards. 4 quick action tiles (all clickable). Recent activity feed. Bottom tab bar (Home/Consents/Rights/Settings). US-105.</span></div>
+</div>
+
+<div id="screen-c-consents" class="screen">
+  <div class="card" style="margin-bottom:20px;">
+    <div style="display:flex;gap:12px;align-items:center;margin-bottom:16px;">
+      <div style="display:flex;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+        <button class="btn btn-primary btn-sm" style="border-radius:0;padding:8px 18px;">Active (7)</button>
+        <button class="btn btn-ghost btn-sm" style="border-radius:0;padding:8px 18px;border:none;">Expired (3)</button>
+        <button class="btn btn-ghost btn-sm" style="border-radius:0;padding:8px 18px;border:none;">Withdrawn (5)</button>
+      </div>
+      <input placeholder="🔍 Search organisations..." style="flex:1;">
+      <select style="width:160px;"><option>All types</option></select>
+    </div>
+    ${[
+      {org:'HDFC Bank',logo:'H',color:'var(--navy)',active:3,total:5,days:28,warn:true},
+      {org:'LIC India',logo:'L',color:'#B91C1C',active:2,total:3,days:89,warn:false},
+      {org:'Axis Bank',logo:'A',color:'#7C3AED',active:4,total:4,days:45,warn:false},
+      {org:'Zepto',logo:'Z',color:'#D97706',active:2,total:4,days:192,warn:false},
+    ].map(o=>`
+    <div class="card card-sm" style="border-color:${o.warn?'var(--orange)':'var(--border)'};margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div style="width:44px;height:44px;border-radius:10px;background:${o.color};display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:18px;font-family:'Fraunces',serif;flex-shrink:0;">${o.logo}</div>
+        <div style="flex:1;"><div style="font-weight:600;font-size:15px;">${o.org}</div><div style="font-size:12px;color:var(--text-2);margin-top:2px;">${o.active} of ${o.total} purposes active</div></div>
+        <div style="text-align:right;">
+          <div class="tag ${o.days<30?'tag-orange':'tag-green'}" style="font-size:11px;">Expires in ${o.days}d</div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:4px;">Tap to manage →</div>
+        </div>
+      </div>
+      ${o.warn?'<div class="alert alert-warning" style="margin-top:10px;padding:8px 12px;font-size:12px;"><span>⚠️</span> Expiring soon — consider renewing</div>':''}
+    </div>`).join('')}
+  </div>
+</div>
+
+<div id="screen-c-withdraw" class="screen">
+  <div class="two-col-3-7">
+    <div class="card">
+      <div class="label" style="margin-bottom:12px;">HDFC Bank — Consents</div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+        <div class="org-avatar" style="width:44px;height:44px;font-size:18px;">H</div>
+        <div><div style="font-weight:600;">HDFC Bank</div><div class="tag tag-green" style="font-size:11px;margin-top:4px;">5 purposes</div></div>
+      </div>
+      ${[
+        {name:'KYC Verification',type:'Statutory',locked:true,on:true},
+        {name:'Loan Processing',type:'Business',locked:true,on:true},
+        {name:'Marketing Offers',type:'Marketing',locked:false,on:false},
+        {name:'Credit Analytics',type:'Analytics',locked:false,on:true},
+        {name:'Partner Referrals',type:'Analytics',locked:false,on:true},
+      ].map(p=>`
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);">
+        <div>
+          <div style="font-weight:500;font-size:13px;${p.locked?'color:var(--text-3)':''}">${p.name}</div>
+          <div style="margin-top:4px;"><span class="tag ${p.type==='Statutory'?'tag-navy':p.type==='Business'?'tag-blue':p.type==='Marketing'?'tag-purple':'tag-orange'}" style="font-size:10px;">${p.type}</span>${p.locked?'<span class="tag tag-gray" style="font-size:10px;margin-left:4px;">🔒 Required</span>':''}</div>
+        </div>
+        <label class="toggle"><input type="checkbox" ${p.on?'checked':''} ${p.locked?'disabled':''}><div class="toggle-slider"></div></label>
+      </div>`).join('')}
+      <button class="btn btn-danger btn-full" style="margin-top:16px;">Withdraw All Optional →</button>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:16px;border-color:var(--orange);background:#FFFBEB;">
+        <div style="font-weight:600;margin-bottom:8px;">⚠️ Confirm Withdrawal</div>
+        <div style="font-size:13px;color:var(--text-2);margin-bottom:12px;">You are withdrawing consent for:</div>
+        <div style="font-size:13px;margin-bottom:4px;">• Credit Analytics</div>
+        <div style="font-size:13px;margin-bottom:16px;">• Partner Referrals</div>
+        <div style="font-size:13px;color:var(--text-2);margin-bottom:16px;line-height:1.6;">From <strong>HDFC Bank</strong>. Their systems will stop using your data for these purposes within <strong>5 minutes</strong> of confirmation.</div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-ghost" style="flex:1;">Cancel</button>
+          <button class="btn btn-danger" style="flex:1;" onclick="go('c-consents')">✓ Confirm</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="label" style="margin-bottom:12px;">What happens next</div>
+        <div class="timeline" style="padding-left:20px;">
+          ${[
+            {dot:'var(--green)',title:'Withdrawal recorded in audit trail','sub':'Timestamp: now'},
+            {dot:'var(--teal)',title:'HDFC Bank notified via webhook','sub':'Within 30 seconds'},
+            {dot:'var(--navy)',title:'Their systems halt processing','sub':'Within 5 minutes (DPDPA §6(5))'},
+            {dot:'var(--text-3)',title:'Confirmation SMS sent to you','sub':'Within 2 minutes'},
+          ].map(t=>`
+          <div class="timeline-item">
+            <div class="timeline-dot" style="background:${t.dot};"></div>
+            <div class="timeline-title">${t.title}</div>
+            <div class="timeline-sub">${t.sub}</div>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="screen-c-rights" class="screen">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="section-title" style="margin-bottom:6px;">Submit a Data Rights Request</div>
+        <p style="font-size:13px;color:var(--text-2);margin-bottom:24px;">Your rights under DPDPA 2023 Sections 8–14</p>
+        <div class="field-group">
+          <div class="label">Request Type</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            ${[['📥 Access','I want to know what data you hold'],['✏️ Correction','I want to correct my data'],['🗑 Erasure','I want my data deleted'],['🚫 Object','I object to certain processing']].map((r,i)=>`
+            <div style="border:2px solid ${i===0?'var(--teal)':'var(--border)'};border-radius:10px;padding:14px;cursor:pointer;background:${i===0?'#F0FDFA':'#fff'};">
+              <div style="font-size:16px;margin-bottom:4px;">${r[0]}</div>
+              <div style="font-size:11px;color:var(--text-2);">${r[1]}</div>
+            </div>`).join('')}
+          </div>
+        </div>
+        <div class="field-group">
+          <div class="label">Organisation</div>
+          <select><option>HDFC Bank</option><option>LIC India</option><option>Axis Bank</option></select>
+        </div>
+        <div class="field-group">
+          <div class="label">Specific Data Categories (optional)</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+            ${['All data','Identity','Financial','Contact','Behavioural','Health'].map((c,i)=>`<span class="tag ${i<2?'tag-navy':'tag-gray'}" style="cursor:pointer;">${c}</span>`).join('')}
+          </div>
+        </div>
+        <div class="field-group">
+          <div class="label">Additional Note <span style="font-weight:400;color:var(--text-3)">(optional, max 500 chars)</span></div>
+          <textarea rows="3" placeholder="Please include all transaction data from Jan–Mar 2026..."></textarea>
+        </div>
+        <button class="btn btn-teal btn-full">Submit Request →</button>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:16px;background:var(--navy);border-color:var(--navy);">
+        <div style="font-weight:600;color:#fff;margin-bottom:12px;">Your Rights under DPDPA 2023</div>
+        ${[['§8(a)','Right to Access','Know what data an org holds about you'],['§10','Right to Correction','Fix inaccurate or incomplete data'],['§12','Right to Erasure','Delete your data (subject to legitimate grounds)'],['§13','Right to Object','Stop certain types of processing']].map(r=>`
+        <div style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.1);">
+          <div style="display:flex;gap:8px;align-items:flex-start;"><span class="tag tag-teal" style="font-size:10px;flex-shrink:0;">${r[0]}</span><div><div style="color:#fff;font-size:13px;font-weight:500;">${r[1]}</div><div style="color:rgba(255,255,255,0.5);font-size:11px;margin-top:2px;">${r[2]}</div></div></div>
+        </div>`).join('')}
+      </div>
+      <div class="card">
+        <div class="label" style="margin-bottom:12px;">SLA After Submission</div>
+        <div style="font-family:'DM Mono',monospace;font-size:13px;color:var(--text-2);">
+          Day 0 — Request received<br>
+          Day 1 — Acknowledgement due<br>
+          Day 20 — ⚠️ Reminder sent<br>
+          Day 30 — Response due<br>
+          Day 45 — Maximum (with extension notice)
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="screen-c-tracker" class="screen">
+  <div class="two-col">
+    <div class="card">
+      <div class="label" style="margin-bottom:12px;">Active Requests</div>
+      ${[
+        {id:'SAM-DR-2026-00142',type:'Access',org:'HDFC Bank',day:12,status:'Under Review',pct:40},
+        {id:'SAM-DR-2026-00098',type:'Erasure',org:'Zepto',day:3,status:'Acknowledged',pct:10},
+      ].map(r=>`
+      <div class="card card-sm" style="margin-bottom:12px;border-color:var(--teal);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+          <div><div class="mono" style="font-size:12px;color:var(--text-3);">${r.id}</div><div style="font-weight:600;font-size:14px;margin-top:4px;">${r.type} Request — ${r.org}</div></div>
+          <span class="tag tag-blue" style="font-size:11px;">${r.status}</span>
+        </div>
+        <div style="font-size:12px;color:var(--text-2);margin-bottom:8px;">Day ${r.day} of 30 — ${30-r.day} days remaining</div>
+        <div class="sla-bar-wrap"><div class="sla-bar-track"><div class="sla-bar-fill ${r.day<20?'sla-safe':'sla-warn'}" style="width:${r.pct}%;"></div></div></div>
+      </div>`).join('')}
+      <div class="label" style="margin:16px 0 12px;">Closed Requests</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);">
+        <div><div class="mono" style="font-size:11px;color:var(--text-3);">SAM-DR-2025-00071</div><div style="font-size:13px;margin-top:2px;">Correction — LIC India</div></div>
+        <span class="tag tag-green">Fulfilled</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="label" style="margin-bottom:16px;">Request Timeline — SAM-DR-2026-00142</div>
+      <div class="timeline" style="padding-left:20px;">
+        ${[
+          {dot:'var(--green)',title:'Request Submitted','sub':'12 Mar 2026 · 09:41 IST','done':true},
+          {dot:'var(--green)',title:'Acknowledged by HDFC Bank','sub':'12 Mar 2026 · 14:22 IST','done':true},
+          {dot:'var(--teal)',title:'Under Review','sub':'In progress — assigned to Compliance Team','active':true},
+          {dot:'var(--border)',title:'Data Package Prepared','sub':'Expected by Day 20'},
+          {dot:'var(--border)',title:'Request Fulfilled','sub':'SLA due: 11 Apr 2026'},
+        ].map(t=>`
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:${t.dot};${t.active?'box-shadow:0 0 0 4px '+t.dot+'40':''};"></div>
+          <div class="timeline-title" ${t.done||t.active?'':'style="color:var(--text-3)"'}>${t.title}</div>
+          <div class="timeline-sub">${t.sub}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="screen-c-prefs" class="screen">
+  <div class="two-col">
+    <div class="card">
+      <div class="section-title">Preferences</div>
+      <div class="field-group"><div class="label">Language</div><select><option>English</option><option>हिंदी</option><option>தமிழ்</option><option>తెలుగు</option></select></div>
+      <div class="field-group"><div class="label">Accessibility</div><div style="display:flex;flex-direction:column;gap:10px;">
+        ${[['Large Text','font-size +20%'],['High Contrast','Enhanced colour ratios'],['Screen Reader Hints','Extra ARIA descriptions'],['Audio Consent','TTS auto-plays on consent form']].map(s=>`<div class="toggle-wrap"><label class="toggle"><input type="checkbox" ${Math.random()>.5?'checked':''}><div class="toggle-slider"></div></label><div><div style="font-size:13px;font-weight:500;">${s[0]}</div><div style="font-size:11px;color:var(--text-2);">${s[1]}</div></div></div>`).join('')}
+      </div></div>
+    </div>
+    <div class="card">
+      <div class="section-title">Notification Preferences</div>
+      ${[['Consent expiry reminders (30 days)','SMS + Email',true],['Consent modification confirmations','SMS',true],['Data rights request updates','Email + App',true],['New organisation consent requests','App notification',false],['Monthly privacy summary','Email',true]].map(n=>`
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--border);">
+        <div><div style="font-size:13px;font-weight:500;">${n[0]}</div><div style="font-size:11px;color:var(--text-3);">${n[1]}</div></div>
+        <label class="toggle"><input type="checkbox" ${n[2]?'checked':''}><div class="toggle-slider"></div></label>
+      </div>`).join('')}
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+   ORG ADMIN PORTAL SCREENS
+═══════════════════════════════════════════════════════════════ -->
+
+<div id="screen-org-signup" class="screen">
+  <div style="max-width:560px;margin:0 auto;">
+    <div class="card">
+      <div style="text-align:center;margin-bottom:28px;"><div style="font-family:'Fraunces',serif;font-size:28px;font-weight:700;color:var(--navy);">Sahamati</div><div style="color:var(--text-2);font-size:14px;margin-top:4px;">Consent Management for India</div></div>
+      <div class="stepper">
+        <div class="step active"><div class="step-dot active">1</div><div class="step-label">Company</div></div>
+        <div class="step-line"></div>
+        <div class="step"><div class="step-dot pending">2</div><div class="step-label">Verify</div></div>
+        <div class="step-line"></div>
+        <div class="step"><div class="step-dot pending">3</div><div class="step-label">Profile</div></div>
+        <div class="step-line"></div>
+        <div class="step"><div class="step-dot pending">4</div><div class="step-label">Plan</div></div>
+      </div>
+      <div class="field-group"><div class="label">Company Name</div><input placeholder="e.g., Axis Bank Limited"></div>
+      <div class="two-col">
+        <div class="field-group"><div class="label">CIN Number <span class="tag tag-blue" style="font-size:10px;">MCA Verified</span></div><input placeholder="L65100MH2000PLC..." value="L65100MH2000PLC128793"></div>
+        <div class="field-group"><div class="label">Industry</div><select><option>BFSI — Banking</option><option>BFSI — NBFC</option><option>Insurance</option><option>Fintech</option></select></div>
+      </div>
+      <div class="field-group"><div class="label">Work Email (no personal domains)</div><input placeholder="compliance@yourcompany.com" value="dpo@axisbank.com"></div>
+      <div class="field-group"><div class="label">DPO Email (DPDPA Mandatory)</div><input placeholder="dpo@yourcompany.com" value="dpo@axisbank.com"></div>
+      <div class="field-group"><div class="label">Mobile (for OTP)</div><input value="+91 98765 43210"></div>
+      <div class="alert alert-info"><span class="alert-icon">ℹ️</span><div style="font-size:12px;">CIN is verified against the MCA API in real-time. Personal email domains (gmail, yahoo, etc.) are blocked. DPO email is mandatory per DPDPA 2023.</div></div>
+      <button class="btn btn-teal btn-full btn-lg" onclick="go('org-wizard')" style="border-radius:10px;">Continue →</button>
+    </div>
+  </div>
+</div>
+
+<div id="screen-org-wizard" class="screen">
+  <div class="two-col-3-7">
+    <div class="card">
+      <div class="label" style="margin-bottom:16px;">Setup Wizard — 5 Steps</div>
+      ${[['1','Create your first Purpose','done'],['2','Build a Consent Form','done'],['3','Configure Notifications','active'],['4','Add Team Members','pending'],['5','Get API Keys','pending']].map(s=>`
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);">
+        <div class="step-dot ${s[2]}" style="flex-shrink:0;">${s[2]==='done'?'✓':s[0]}</div>
+        <div style="font-size:13px;font-weight:${s[2]==='active'?'600':'400'};color:${s[2]==='pending'?'var(--text-3)':'var(--text)'};">${s[1]}</div>
+      </div>`).join('')}
+      <div style="margin-top:20px;font-size:12px;color:var(--text-3);">Step 3 of 5 — 15 minutes to go-live</div>
+    </div>
+    <div class="card">
+      <div class="section-title">Step 3: Notification Settings</div>
+      <div class="field-group"><div class="label">Organisation Name in Notifications</div><input value="Axis Bank Limited"></div>
+      <div class="field-group"><div class="label">From Email (consent confirmations)</div><input value="consent@axisbank.com"></div>
+      <div class="field-group"><div class="label">SMS Sender ID (TRAI Registered)</div><input value="AXISBN" placeholder="6-char TRAI DLT sender ID"></div>
+      <div class="field-group"><div class="label">WhatsApp Business Number</div><input placeholder="+91..."></div>
+      <div class="field-group"><div class="label">Trigger Notifications For</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          ${[['Consent captured','Confirmation to consumer',true],['Consent expiring in 30 days','Renewal nudge',true],['Consent withdrawn','Confirmation + internal alert',true],['Data rights request received','Consumer + DPO alert',true]].map(n=>`
+          <div class="toggle-wrap"><label class="toggle"><input type="checkbox" ${n[2]?'checked':''}><div class="toggle-slider"></div></label><div><div style="font-size:13px;font-weight:500;">${n[0]}</div><div style="font-size:11px;color:var(--text-2);">${n[1]}</div></div></div>`).join('')}
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;"><button class="btn btn-ghost">← Back</button><button class="btn btn-teal" style="flex:1;">Save & Continue →</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="screen-org-dashboard" class="screen">
+  <div class="stats-row">
+    <div class="stat-card highlight">
+      <div class="stat-label">Total Consents</div>
+      <div class="stat-num">1,24,892</div>
+      <div class="stat-sub">↑ +2,341 this week</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Acceptance Rate</div>
+      <div class="stat-num" style="color:var(--green);">84%</div>
+      <div class="stat-sub">↑ +3% vs last month</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Active Processors</div>
+      <div class="stat-num">12</div>
+      <div class="stat-sub">2 DPAs expiring soon</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Open Rights Requests</div>
+      <div class="stat-num" style="color:var(--orange);">7</div>
+      <div class="stat-sub">Oldest: Day 18 of 30</div>
+    </div>
+  </div>
+  <div class="two-col-6-4">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><div class="label" style="margin:0;">Consent Volume — Last 7 Weeks</div><select style="width:140px;"><option>All purposes</option></select></div>
+      <div style="display:flex;align-items:flex-end;gap:6px;height:120px;padding-bottom:8px;">
+        ${[45,62,58,80,74,91,88].map((v,i)=>`<div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;"><div style="font-size:10px;color:var(--text-3);">${v}k</div><div style="height:${v}%;background:${i===6?'var(--teal)':'var(--navy)'};opacity:${i===6?1:0.5};border-radius:4px 4px 0 0;width:100%;min-width:24px;"></div><div style="font-size:10px;color:var(--text-3);">W${i+1}</div></div>`).join('')}
+      </div>
+    </div>
+    <div class="card">
+      <div class="label" style="margin-bottom:12px;">Purpose Breakdown</div>
+      ${[['KYC Verification','Statutory',98,'var(--navy)'],['Loan Processing','Business',87,'var(--teal)'],['Marketing Offers','Marketing',52,'var(--purple,#7C3AED)'],['Credit Analytics','Analytics',41,'var(--orange)']].map(p=>`
+      <div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:12px;"><span>${p[0]}</span><span style="font-weight:600;">${p[2]}%</span></div><div style="height:6px;background:var(--border);border-radius:4px;"><div style="height:100%;width:${p[2]}%;background:${p[3]};border-radius:4px;"></div></div></div>`).join('')}
+    </div>
+  </div>
+</div>
+
+<div id="screen-form-builder" class="screen" style="margin:-28px;">
+  <div class="builder-layout">
+    <div class="builder-sidebar">
+      <div class="builder-topbar">
+        <span>Form Builder</span>
+        <div class="active-view">Desktop</div>
+        <div class="active-view">Mobile</div>
+      </div>
+      <div style="padding:14px 16px;border-bottom:1px solid var(--border);background:#F8FAFC;">
+        <div class="label" style="margin-bottom:8px;">Form Name</div>
+        <input value="Loan Application Consent v2.1" style="font-size:13px;">
+      </div>
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:12px;font-weight:600;color:var(--text-2);">PURPOSE CHECKLIST</span>
+        <button class="btn btn-sm btn-teal" style="font-size:11px;padding:5px 10px;">+ Add</button>
+      </div>
+      <div style="overflow-y:auto;flex:1;">
+        ${[
+          {name:'KYC Verification',type:'Statutory',locked:true,on:true},
+          {name:'AML Check',type:'Statutory',locked:true,on:true},
+          {name:'Loan Processing',type:'Business',locked:true,on:true},
+          {name:'Marketing Offers',type:'Marketing',locked:false,on:true},
+          {name:'Credit Analytics',type:'Analytics',locked:false,on:true},
+          {name:'Partner Referrals',type:'Analytics',locked:false,on:false},
+          {name:'Profiling',type:'Profiling',locked:false,on:false},
+        ].map((p,i)=>`
+        <div class="purpose-item ${i===3?'selected':''}">
+          <input type="checkbox" ${p.on?'checked':''} ${p.locked?'disabled':''}>
+          <div class="pi-content">
+            <div class="pi-name">${p.name}</div>
+            <div style="display:flex;gap:5px;margin-top:4px;"><span class="tag ${p.type==='Statutory'?'tag-navy':p.type==='Business'?'tag-blue':p.type==='Marketing'?'tag-purple':'tag-orange'}" style="font-size:10px;">${p.type}</span>${p.locked?'<span class="tag tag-gray" style="font-size:10px;">🔒</span>':''}</div>
+          </div>
+        </div>`).join('')}
+      </div>
+      <div style="padding:14px 16px;border-top:1px solid var(--border);display:flex;gap:8px;">
+        <button class="btn btn-ghost btn-sm" style="flex:1;">Save Draft</button>
+        <button class="btn btn-teal btn-sm" style="flex:1;">Publish →</button>
+      </div>
+    </div>
+    <div class="builder-preview">
+      <div style="padding:16px 20px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+        <div style="font-size:13px;font-weight:500;color:var(--text-2);">Live Preview — Consumer View</div>
+        <div style="display:flex;gap:8px;font-size:12px;">
+          <span class="tag tag-green">✓ Readability Score: 6.2 (≤6th grade)</span>
+          <span class="tag tag-navy">v2.1</span>
+        </div>
+      </div>
+      <div class="consent-preview">
+        <div class="consent-org-header">
+          <div class="org-avatar">A</div>
+          <div><div style="font-weight:600;font-size:16px;">Axis Bank Limited</div><div style="font-size:12px;color:var(--text-2);">Loan Application Consent Form</div></div>
+        </div>
+        <div class="consent-notice">
+          <strong>Before you proceed</strong> — We need your permission to use your personal information for the following purposes. Required consents are marked with a lock. You can choose or decline optional ones.
+        </div>
+        ${[
+          {name:'KYC Verification',desc:'Verify your identity as required by RBI Master Directions',type:'Statutory',ret:'3 years',lock:true,on:true},
+          {name:'Loan Processing',desc:'Evaluate and process your home loan application',type:'Business',ret:'7 years',lock:true,on:true},
+          {name:'Marketing Offers',desc:'Send personalised product offers via SMS and email',type:'Marketing',ret:'1 year',lock:false,on:true},
+          {name:'Credit Analytics',desc:'Improve credit decisions using anonymised usage data',type:'Analytics',ret:'2 years',lock:false,on:false},
+        ].map(p=>`
+        <div class="purpose-row">
+          <div class="pr-info">
+            <div class="pr-name">${p.name}</div>
+            <div class="pr-desc">${p.desc}</div>
+            <div class="pr-meta"><span class="tag ${p.type==='Statutory'?'tag-navy':p.type==='Business'?'tag-blue':p.type==='Marketing'?'tag-purple':'tag-orange'}" style="font-size:10px;">${p.type}</span><span class="tag tag-gray" style="font-size:10px;">⏱ ${p.ret}</span>${p.lock?'<span class="tag tag-gray" style="font-size:10px;">🔒 Required</span>':''}</div>
+          </div>
+          <label class="toggle"><input type="checkbox" ${p.on?'checked':''} ${p.lock?'disabled':''}><div class="toggle-slider"></div></label>
+        </div>`).join('')}
+        <button class="btn btn-teal btn-full" style="margin-top:20px;">Confirm & Continue →</button>
+        <div style="text-align:center;font-size:11px;color:var(--text-3);margin-top:12px;">Secured by Sahamati · DPDPA 2023 Compliant</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="screen-purpose-registry" class="screen">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+    <div class="section-title" style="margin:0;">Purpose Master Registry</div>
+    <button class="btn btn-teal">+ Create Purpose</button>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Purpose Name</th><th>Type</th><th>Lawful Basis</th><th>Data Categories</th><th>Retention</th><th>Mandatory</th><th>Forms</th><th>Actions</th></tr></thead>
+      <tbody>
+        ${[
+          ['KYC Verification','Statutory','Statutory Authority','Name, Aadhaar, PAN, DOB','3 years','Yes',8],
+          ['AML Check','Statutory','Statutory Authority','Financial transactions, Name','3 years','Yes',6],
+          ['Loan Processing','Business','Contract','Income, Assets, Employment','7 years','Yes',4],
+          ['Marketing Offers','Marketing','Consent','Name, Email, Phone','1 year','No',7],
+          ['Credit Analytics','Analytics','Consent','Transaction patterns (anon)','2 years','No',5],
+          ['Profiling','Profiling','Consent','Behavioral data','6 months','No',2],
+        ].map((r,i)=>`<tr>
+          <td style="font-weight:500;">${r[0]}</td>
+          <td><span class="tag ${r[1]==='Statutory'?'tag-navy':r[1]==='Business'?'tag-blue':r[1]==='Marketing'?'tag-purple':'tag-orange'}" style="font-size:11px;">${r[1]}</span></td>
+          <td style="font-size:12px;">${r[2]}</td>
+          <td style="font-size:12px;color:var(--text-2);">${r[3]}</td>
+          <td class="mono" style="font-size:12px;">${r[4]}</td>
+          <td>${r[5]==='Yes'?'<span class="tag tag-red">🔒 Yes</span>':'<span class="tag tag-green">Optional</span>'}</td>
+          <td><span class="tag tag-gray" style="font-size:11px;">${r[6]} forms</span></td>
+          <td><button class="btn btn-ghost btn-sm" style="font-size:12px;">Edit</button></td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="screen-batch-ops" class="screen">
+  <div class="two-col">
+    <div class="card">
+      <div class="section-title">Batch Consent Operations</div>
+      <div class="alert alert-warning"><span class="alert-icon">⚠️</span><div>Batch operations affect multiple data subjects. DPO approval is required before execution.</div></div>
+      <div class="field-group"><div class="label">Operation Type</div><select><option>Re-consent Campaign (form version change)</option><option>Bulk Expiry Extension</option><option>Purpose Deactivation</option><option>Retention Period Update</option></select></div>
+      <div class="field-group"><div class="label">Target Segment</div><select><option>All active consents (124,892)</option><option>Specific consent form</option><option>Date range</option><option>Purpose type</option></select></div>
+      <div class="field-group"><div class="label">Affected Consent Form</div><select><option>Loan Application Consent v2.0 → v2.1</option></select></div>
+      <div class="card card-sm" style="background:#F8FAFC;"><div class="label" style="margin-bottom:8px;">Estimated Impact</div><div style="font-size:14px;"><strong>82,441</strong> consent records affected<br><span style="font-size:12px;color:var(--text-2);">Re-consent notifications will be sent via SMS + Email</span></div></div>
+      <div style="display:flex;gap:10px;margin-top:16px;"><button class="btn btn-ghost" style="flex:1;">Cancel</button><button class="btn btn-primary" style="flex:1;">Request DPO Approval →</button></div>
+    </div>
+    <div class="card">
+      <div class="label" style="margin-bottom:12px;">Batch Job History</div>
+      ${[
+        {name:'Re-consent: v2.0→v2.1',date:'Mar 10',status:'Completed',records:'82,441',success:'99.7%'},
+        {name:'Expiry extension (RBI circular)',date:'Feb 28',status:'Completed',records:'15,200',success:'100%'},
+        {name:'Marketing purpose disable',date:'Feb 14',status:'Completed',records:'4,891',success:'98.9%'},
+      ].map(j=>`
+      <div class="card card-sm" style="margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-weight:500;font-size:13px;">${j.name}</span><span class="tag tag-green" style="font-size:11px;">${j.status}</span></div>
+        <div style="font-size:12px;color:var(--text-2);">${j.date} · ${j.records} records · ${j.success} success rate</div>
+      </div>`).join('')}
+    </div>
+  </div>
+</div>
+
+<div id="screen-api-keys" class="screen">
+  <div class="two-col">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;"><div class="section-title" style="margin:0;">API Keys</div><button class="btn btn-teal btn-sm">+ Generate Key</button></div>
+      ${[
+        {prefix:'PROD-',name:'Production Key',scope:'Full platform access',created:'Jan 12',last:'2h ago',type:'production'},
+        {prefix:'DEV-',name:'Development Key',scope:'Sandbox environment only',created:'Jan 12',last:'yesterday',type:'dev'},
+        {prefix:'RO-',name:'Read-Only Key (BI API)',scope:'GET endpoints only',created:'Feb 5',last:'1h ago',type:'readonly'},
+        {prefix:'WH-',name:'Webhook Secret',scope:'HMAC-SHA256 signing',created:'Jan 12',last:'Never shown',type:'webhook'},
+      ].map(k=>`
+      <div class="card card-sm" style="margin-bottom:10px;border-left:4px solid ${k.type==='production'?'var(--red)':k.type==='dev'?'var(--teal)':k.type==='readonly'?'var(--navy)':'var(--gold)'};">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><span class="tag ${k.type==='production'?'tag-red':k.type==='dev'?'tag-teal':k.type==='readonly'?'tag-navy':'tag-orange'}" style="font-size:10px;">${k.prefix}***</span><div style="font-weight:500;margin-top:6px;font-size:13px;">${k.name}</div><div style="font-size:11px;color:var(--text-3);">${k.scope}</div></div><button class="btn btn-ghost btn-sm" style="font-size:11px;">Rotate</button></div>
+        <div style="font-size:11px;color:var(--text-3);margin-top:8px;">Created ${k.created} · Last used ${k.last}</div>
+      </div>`).join('')}
+      <div class="code-block" style="margin-top:16px;">
+        <div class="cm">// Embed consent widget (E-09)</div>
+        <div>&lt;<span class="kw">script</span> src=<span class="str">"https://cdn.sahamati.in/widget/v1.js"</span></div>
+        <div>  <span class="kw">integrity</span>=<span class="str">"sha384-xyz...abc"</span> <span class="cm">/* SRI hash */</span></div>
+        <div>  <span class="kw">crossorigin</span>=<span class="str">"anonymous"</span>&gt;</div>
+        <div>&lt;/<span class="kw">script</span>&gt;</div>
+        <div><span class="fn">Sahamati</span>.init({</div>
+        <div>  org_id: <span class="str">"pub_axisbank_7x9k"</span>, <span class="cm">/* Public — safe in HTML */</span></div>
+        <div>  form_id: <span class="str">"loan-consent-v2.1"</span>,</div>
+        <div>  lang: <span class="str">"en"</span>, test_mode: <span class="kw">false</span></div>
+        <div>});</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-title">Role & Access Management</div>
+      <div class="table-wrap">
+        <table style="font-size:12px;">
+          <thead><tr><th>User</th><th>Role</th><th>MFA</th><th>Last Login</th></tr></thead>
+          <tbody>
+            ${[['Priya Sharma','Super Admin','✅ TOTP','2h ago'],['Rajan Mehta','DPO','✅ TOTP','Yesterday'],['Anjali Gupta','Compliance Mgr','✅ TOTP','4h ago'],['Dev Team','Engineering','❌','1d ago'],['Support Staff','Read Only','—','3d ago']].map(u=>`<tr><td><div style="font-weight:500;">${u[0]}</div></td><td><span class="tag ${u[1]==='Super Admin'?'tag-red':u[1]==='DPO'?'tag-navy':u[1]==='Compliance Mgr'?'tag-teal':'tag-gray'}" style="font-size:10px;">${u[1]}</span></td><td>${u[2]}</td><td style="color:var(--text-3);">${u[3]}</td></tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+   DPO PORTAL SCREENS
+═══════════════════════════════════════════════════════════════ -->
+
+<div id="screen-dpo-dashboard" class="screen">
+  <div class="stats-row">
+    <div class="stat-card" style="border-left:4px solid var(--red);">
+      <div class="stat-label">🚩 Critical Red Flags</div>
+      <div class="stat-num" style="color:var(--red);">2</div>
+      <div class="stat-sub">Requires immediate action</div>
+    </div>
+    <div class="stat-card" style="border-left:4px solid var(--orange);">
+      <div class="stat-label">⏰ Rights Requests Due</div>
+      <div class="stat-num" style="color:var(--orange);">3</div>
+      <div class="stat-sub">Within 5 days</div>
+    </div>
+    <div class="stat-card" style="border-left:4px solid var(--gold);">
+      <div class="stat-label">📝 DPA Renewals Due</div>
+      <div class="stat-num" style="color:var(--gold);">2</div>
+      <div class="stat-sub">Within 60 days</div>
+    </div>
+    <div class="stat-card highlight">
+      <div class="stat-label">💚 Consent Health Score</div>
+      <div class="stat-num" style="color:var(--green);">82</div>
+      <div class="stat-sub">GOOD — ↑ +3 this week</div>
+    </div>
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <div class="label" style="margin-bottom:14px;">Action Queue — Today</div>
+      ${[
+        {icon:'🚨',color:'var(--red)',title:'DPA Expired: PayU India','sub':'Processor data access must halt immediately','action':'View Flag'},
+        {icon:'⚠️',color:'var(--orange)',title:'Rights Request SLA: Day 25 of 30','sub':'Priya K. — Erasure request (Axis Bank)','action':'Review'},
+        {icon:'👥',color:'var(--navy)',title:'4-Eyes Approval Pending','sub':'Bulk erasure (4,200 records) — awaiting your approval','action':'Approve'},
+        {icon:'📋',color:'var(--teal)',title:'DPA Renewal: CIBIL Limited','sub':'Expires in 45 days — draft renewal ready','action':'Sign'},
+      ].map(a=>`
+      <div style="display:flex;align-items:flex-start;gap:12px;padding:14px;border:1px solid var(--border);border-radius:10px;margin-bottom:10px;cursor:pointer;" onmouseover="this.style.background='#F8FAFC'" onmouseout="this.style.background='#fff'">
+        <div style="font-size:20px;">${a.icon}</div>
+        <div style="flex:1;"><div style="font-weight:500;font-size:13px;">${a.title}</div><div style="font-size:12px;color:var(--text-2);margin-top:3px;">${a.sub}</div></div>
+        <button class="btn btn-ghost btn-sm" style="font-size:12px;white-space:nowrap;">${a.action}</button>
+      </div>`).join('')}
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="label" style="margin-bottom:12px;">Regulatory Filing Calendar</div>
+        ${[['CERT-IN Annual Report','31 Mar 2026','19 days',true],['RBI Compliance Filing','30 Jun 2026','110 days',false],['SEBI Investor Filing','30 Apr 2026','49 days',false]].map(f=>`
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);">
+          <div><div style="font-size:13px;font-weight:500;">${f[0]}</div><div style="font-size:11px;color:var(--text-3);">${f[1]}</div></div>
+          <span class="tag ${f[2].startsWith('19')?'tag-orange':f[2].startsWith('49')?'tag-blue':'tag-green'}" style="font-size:11px;">In ${f[2]}</span>
+        </div>`).join('')}
+      </div>
+      <div class="card">
+        <div class="label" style="margin-bottom:12px;">Absence Coverage</div>
+        <div style="font-size:13px;color:var(--text-2);margin-bottom:12px;">Deputy DPO (required before declaring absence):</div>
+        <div style="display:flex;align-items:center;gap:10px;"><div style="width:36px;height:36px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;">AK</div><div><div style="font-size:13px;font-weight:500;">Anjali Kumar</div><div style="font-size:11px;color:var(--text-3);">Compliance Manager · Designated Deputy</div></div></div>
+        <button class="btn btn-ghost btn-full" style="margin-top:12px;font-size:13px;">🏖 Declare Absence</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="screen-red-flags" class="screen">
+  <div style="display:flex;gap:12px;margin-bottom:20px;">
+    ${[['Critical','2','var(--red)'],['High','2','var(--orange)'],['Medium','5','var(--gold)'],['Low','3','var(--text-3)']].map(f=>`<div style="flex:1;background:#fff;border:2px solid ${f[2]}20;border-radius:10px;padding:14px;text-align:center;"><div style="font-size:22px;font-weight:700;color:${f[2]};">${f[1]}</div><div style="font-size:12px;color:var(--text-2);">${f[0]}</div></div>`).join('')}
+  </div>
+  <div class="card">
+    <div style="display:flex;gap:10px;margin-bottom:16px;"><input placeholder="🔍 Search flags..." style="flex:1;"><select style="width:140px;"><option>All Statuses</option><option>Open</option><option>Acknowledged</option></select><select style="width:140px;"><option>All Severities</option></select></div>
+    ${[
+      {id:'RF-C01',sev:'CRITICAL',type:'DPA Expired',detail:'PayU India DPA expired 2 days ago. Processor data access must halt.',age:'2d',status:'OPEN'},
+      {id:'RF-C05',sev:'CRITICAL',type:'Webhook Delivery Failed',detail:'HDFC Bank webhook: 5 consecutive failures. Dead-letter queue active.',age:'6h',status:'OPEN'},
+      {id:'RF-H03',sev:'HIGH',type:'Rights Request SLA at Risk',detail:'3 data rights requests approach 30-day deadline within 5 days.',age:'1d',status:'ACKNOWLEDGED'},
+      {id:'RF-H07',sev:'HIGH',type:'Sub-Processor Added',detail:'CIBIL reported new sub-processor in Singapore (non-adequate jurisdiction).',age:'3d',status:'IN REMEDIATION'},
+    ].map(f=>`
+    <div class="card card-sm flag-${f.sev.toLowerCase()} cursor-pointer" style="margin-bottom:10px;cursor:pointer;" onclick="go('red-flag-detail')">
+      <div style="display:flex;align-items:flex-start;gap:12px;">
+        <span class="tag ${f.sev==='CRITICAL'?'tag-red':f.sev==='HIGH'?'tag-orange':'tag-blue'}" style="font-size:10px;white-space:nowrap;">${f.sev}</span>
+        <div style="flex:1;">
+          <div style="font-weight:600;font-size:13px;">${f.id}: ${f.type}</div>
+          <div style="font-size:12px;color:var(--text-2);margin-top:4px;">${f.detail}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;"><div class="tag tag-gray" style="font-size:10px;">${f.status}</div><div style="font-size:11px;color:var(--text-3);margin-top:4px;">${f.age} ago</div></div>
+      </div>
+    </div>`).join('')}
+  </div>
+</div>
+
+<div id="screen-red-flag-detail" class="screen">
+  <div class="two-col-3-7">
+    <div class="card">
+      <span class="tag tag-red" style="margin-bottom:12px;">CRITICAL</span>
+      <div style="font-weight:700;font-size:16px;margin-bottom:4px;">RF-C01: DPA Expired</div>
+      <div style="font-size:12px;color:var(--text-3);margin-bottom:16px;">Raised 2 days ago · Auto-generated</div>
+      <div class="divider"></div>
+      <div class="label" style="margin-bottom:6px;">Resolution SLA</div>
+      <div style="font-size:13px;font-weight:600;color:var(--red);">24 hours remaining</div>
+      <div class="sla-bar-wrap" style="margin-top:6px;"><div class="sla-bar-track"><div class="sla-bar-fill sla-danger" style="width:80%;"></div></div></div>
+      <div class="divider"></div>
+      <div class="label" style="margin-bottom:8px;">Processor</div>
+      <div style="font-size:13px;font-weight:500;">PayU India Pvt. Ltd.</div>
+      <div style="font-size:12px;color:var(--text-2);">Data Processor · Payment Gateway</div>
+      <div class="divider"></div>
+      <div class="label" style="margin-bottom:8px;">Actions Required</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <button class="btn btn-danger btn-sm">🚫 Halt Data Access Now</button>
+        <button class="btn btn-ghost btn-sm" onclick="go('dpa-lifecycle')">📝 Renew DPA</button>
+        <button class="btn btn-ghost btn-sm">Mark as False Positive</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="label" style="margin-bottom:16px;">Flag Timeline</div>
+      <div class="timeline" style="padding-left:20px;">
+        ${[
+          {dot:'var(--red)',title:'DPA Expired — flag auto-generated','time':'Mar 10 00:01 IST','note':'DPA expiry date: Mar 09 2026'},
+          {dot:'var(--orange)',title:'SMS alert sent to DPO (Rajan Mehta)','time':'Mar 10 00:01 IST','note':'Delivered to +91 98765 XXXXX'},
+          {dot:'var(--orange)',title:'Unacknowledged 30 minutes — Super Admin SMS','time':'Mar 10 00:31 IST','note':'Priya Sharma notified'},
+          {dot:'var(--teal)',title:'Flag Acknowledged by DPO','time':'Mar 10 09:15 IST','note':'Rajan Mehta'},
+          {dot:'var(--text-3)',title:'Resolution SLA: 24h remaining','time':'Mar 12 00:01 IST','note':'Action required now'},
+        ].map(t=>`<div class="timeline-item"><div class="timeline-dot" style="background:${t.dot};"></div><div class="timeline-time">${t.time}</div><div class="timeline-title">${t.title}</div><div class="timeline-sub">${t.note}</div></div>`).join('')}
+      </div>
+      <div class="alert alert-danger" style="margin-top:16px;"><span class="alert-icon">🚨</span><div><strong>Regulatory Risk:</strong> DPDPA 2023 §8(6) — processing data without a valid DPA is a violation. PayU India's data access must be halted immediately pending DPA renewal.</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="screen-processors" class="screen">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;"><div class="section-title" style="margin:0;">Processor Registry (E-07)</div><button class="btn btn-teal">+ Add Processor</button></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Processor</th><th>Type</th><th>Jurisdiction</th><th>DPA Status</th><th>Last Audit</th><th>Risk Score</th><th>Actions</th></tr></thead>
+      <tbody>
+        ${[
+          ['CIBIL Limited','Credit Bureau','India','Signed ✓ (45d)','Jan 2026 · Pass','18',true],
+          ['PayU India','Payment Gateway','India','⚠️ EXPIRED','Nov 2025 · Pass','72',false],
+          ['AWS India','Cloud Provider','India','Signed ✓ (210d)','Dec 2025 · Pass','12',true],
+          ['Razorpay','Payment Gateway','India','Signed ✓ (89d)','Oct 2025 · Pass','21',true],
+          ['DigiLocker API','Gov. Service','India','Signed ✓ (310d)','—','8',true],
+          ['Experian PLC','Credit Bureau','UK','Signed ✓ (180d)','Mar 2025 · Pass','45',true],
+        ].map(r=>`<tr onclick="go('dpa-lifecycle')" style="cursor:pointer;">
+          <td style="font-weight:500;">${r[0]}</td>
+          <td style="font-size:12px;">${r[1]}</td>
+          <td><span class="tag ${r[2]==='India'?'tag-green':r[2]==='UK'?'tag-orange':'tag-blue'}" style="font-size:10px;">${r[2]}</span></td>
+          <td><span class="tag ${r[3].includes('EXPIRED')?'tag-red':r[3].includes('45d')?'tag-orange':'tag-green'}" style="font-size:11px;">${r[3]}</span></td>
+          <td style="font-size:12px;">${r[4]}</td>
+          <td><span class="tag ${parseInt(r[5])<20?'tag-green':parseInt(r[5])<40?'tag-blue':parseInt(r[5])<70?'tag-orange':'tag-red'}" style="font-size:11px;">${r[5]}/100</span></td>
+          <td><button class="btn btn-ghost btn-sm" style="font-size:11px;">View</button></td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="screen-dpa-lifecycle" class="screen">
+  <div class="two-col">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;"><div><div style="font-weight:700;font-size:16px;">CIBIL Limited</div><div style="font-size:12px;color:var(--text-2);">Credit Bureau · India</div></div><span class="tag tag-green">Active</span></div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;"><div style="flex:1;height:8px;background:var(--border);border-radius:8px;"><div style="width:65%;height:100%;background:var(--green);border-radius:8px;"></div></div><span style="font-size:12px;color:var(--text-2);white-space:nowrap;">45 days left</span></div>
+      <div class="label" style="margin-bottom:12px;">DPA Version History</div>
+      ${[['v3.0','Jan 2026 — Apr 2026','Signed · Current','SIGNED'],['v2.1','Jan 2025 — Jan 2026','Archived','ARCHIVED'],['v2.0','Jan 2024 — Jan 2025','Archived','ARCHIVED']].map(d=>`
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);">
+        <div class="tag tag-gray mono" style="font-size:10px;">${d[0]}</div>
+        <div style="flex:1;font-size:13px;">${d[1]}</div>
+        <span class="tag ${d[3]==='SIGNED'?'tag-green':'tag-gray'}" style="font-size:10px;">${d[2]}</span>
+      </div>`).join('')}
+      <div style="font-size:11px;color:var(--text-3);margin-top:8px;">DPA records are immutable. No UPDATE/DELETE permitted (DPDPA compliance).</div>
+      <button class="btn btn-teal btn-full" style="margin-top:16px;">📝 Initiate DPA Renewal</button>
+    </div>
+    <div class="card">
+      <div class="label" style="margin-bottom:12px;">DPA Sections Covered</div>
+      ${['Scope and Purpose of Processing','Data Security Requirements (AES-256, TLS 1.3)','Sub-processor Approval Process','Data Subject Rights Obligations','72h Breach Notification Requirement','Data Localization (India only)','Audit and Inspection Rights','Term and Termination','Governing Law (India — DPDPA 2023)','Liability Cap (₹5 crore per incident)','IP Ownership (data belongs to Fiduciary)','Force Majeure','OFAC/UN Sanctions Compliance','Sub-processor Transparency Obligation','Incident Response Plan','DPO Contact Details'].map((s,i)=>`<div style="display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;"><span style="color:var(--green);font-size:14px;">✓</span><span>§${i+1}: ${s}</span></div>`).join('')}
+    </div>
+  </div>
+</div>
+
+<div id="screen-audit-trail" class="screen">
+  <div style="display:flex;gap:12px;margin-bottom:20px;">
+    <input placeholder="🔍 Consumer ID, Event Code, Actor..." style="flex:1;">
+    <select style="width:160px;"><option>All Categories</option><option>Consent Events</option><option>Data Rights</option><option>Security</option><option>Processor</option></select>
+    <input type="date" value="2026-03-12" style="width:160px;">
+    <select style="width:130px;"><option>Export ▾</option><option>Export CSV</option><option>Export JSON</option><option>Export PDF</option></select>
+    <button class="btn btn-teal">Search</button>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding:10px 16px;background:#F8FAFC;border-radius:8px;font-size:12px;">
+    <span style="color:var(--text-2);">Viewing as:</span>
+    <span style="font-weight:600;color:var(--navy);">Compliance Manager</span>
+    <span class="tag tag-orange">PII Masked</span>
+    <button class="btn btn-ghost btn-sm" style="margin-left:auto;">🔐 Switch to DPO View (15-min session)</button>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>+</th><th>Timestamp</th><th>Event Code</th><th>Severity</th><th>Actor</th><th>Subject</th><th>Action</th><th>Before → After</th></tr></thead>
+      <tbody>
+        ${[
+          ['09:41:22.142','CONSENT_CAPTURED','INFO','Consumer (A**a K**r)','CNS-2026-HD-00247','Consent submitted via Web','— → Active'],
+          ['09:45:11.023','CONSENT_VALIDATED','DEBUG','System (E-16 API)','CNS-2026-HD-00247','Real-time enforcement check','— → ALLOW'],
+          ['11:22:07.891','CONSENT_WITHDRAWN','INFO','Consumer (A**a K**r)','CNS-2026-HD-00247','Withdrew: Marketing, Analytics','Active → Withdrawn'],
+          ['11:22:08.042','CONSENT_RENOTIFICATION_SENT','INFO','System (Celery)','CNS-2026-HD-00247','Webhook sent to processors','— → Delivered'],
+          ['14:30:45.200','DRIGHT_REQUEST_SUBMITTED','INFO','Consumer (R**n M**a)','SAM-DR-2026-00142','Access request — all categories','— → Received'],
+          ['15:01:00.000','DPA_EXPIRED','ERROR','System (scheduler)','PayU India DPA v2.1','DPA passed expiry date','Active → Expired'],
+          ['15:01:00.010','RED_FLAG_RAISED','CRITICAL','System (E-08)','RF-C02','CRITICAL flag: Processor without DPA','— → Open'],
+        ].map(e=>`<tr onclick="go('audit-log-detail')" style="cursor:pointer;" title="Click to view full event detail">
+          <td style="color:var(--teal);font-size:16px;text-align:center;">+</td>
+          <td class="mono" style="font-size:11px;">${e[0]}</td>
+          <td><span class="tag tag-gray mono" style="font-size:10px;">${e[1]}</span></td>
+          <td><span class="tag ${e[2]==='CRITICAL'?'tag-red':e[2]==='ERROR'?'tag-orange':e[2]==='WARN'?'tag-orange':'tag-blue'}" style="font-size:10px;">${e[2]}</span></td>
+          <td style="font-size:12px;">${e[3]}</td>
+          <td class="mono" style="font-size:11px;color:var(--text-2);">${e[4]}</td>
+          <td style="font-size:12px;">${e[5]}</td>
+          <td class="mono" style="font-size:11px;color:var(--teal);">${e[6]}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>
+  <div style="font-size:12px;color:var(--text-3);margin-top:12px;text-align:center;">All events include HMAC-SHA256 signature · Tamper detection via hash chain · 7-year retention · Append-only · Click any row to view full detail</div>
+</div>
+
+<div id="screen-audit-log-detail" class="screen">
+  <button class="btn btn-ghost btn-sm" onclick="go('audit-trail')" style="margin-bottom:20px;">← Back to Audit Trail</button>
+
+  <!-- Header -->
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;">
+    <div style="flex:1;">
+      <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;">Audit Event Detail</div>
+      <div style="font-size:13px;color:var(--text-2);margin-top:3px;font-family:'DM Mono',monospace;">EVT-2026-0000047283 · CONSENT_WITHDRAWN · 12 Mar 2026 09:30:00.142 IST</div>
+    </div>
+    <span class="tag tag-blue">INFO</span>
+    <span class="tag tag-green" style="font-size:12px;">✅ Chain Verified</span>
+    <button class="btn btn-ghost btn-sm">🔗 Permalink</button>
+  </div>
+
+  <!-- Row 1: Metadata + Actor + Subject + Org -->
+  <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:16px;margin-bottom:20px;">
+    <div class="card card-sm">
+      <div class="label">Event Metadata</div>
+      <div style="margin-top:10px;display:flex;flex-direction:column;gap:7px;font-size:12px;">
+        <div><span style="color:var(--text-3);min-width:80px;display:inline-block;">Event ID</span> <span class="mono" style="color:var(--navy);">EVT-2026-0000047283</span></div>
+        <div><span style="color:var(--text-3);min-width:80px;display:inline-block;">Code</span> <span class="mono tag tag-gray" style="font-size:11px;">CONSENT_WITHDRAWN</span></div>
+        <div><span style="color:var(--text-3);min-width:80px;display:inline-block;">Category</span> <span>Consent Events</span></div>
+        <div><span style="color:var(--text-3);min-width:80px;display:inline-block;">Severity</span> <span class="tag tag-blue" style="font-size:10px;">INFO</span></div>
+        <div><span style="color:var(--text-3);min-width:80px;display:inline-block;">Timestamp</span> <span class="mono">2026-03-12T09:30:00.142Z</span></div>
+        <div><span style="color:var(--text-3);min-width:80px;display:inline-block;">IST</span> <span class="mono">2026-03-12 15:00:00.142</span></div>
+        <div><span style="color:var(--text-3);min-width:80px;display:inline-block;">Service</span> <span class="mono">consent-service</span></div>
+        <div><span style="color:var(--text-3);min-width:80px;display:inline-block;">Pod</span> <span class="mono" style="font-size:11px;">consent-svc-7d9f4b-xxxx</span></div>
+        <div><span style="color:var(--text-3);min-width:80px;display:inline-block;">API v</span> <span>v1</span></div>
+        <div><span style="color:var(--text-3);min-width:80px;display:inline-block;">Request ID</span> <span class="mono" style="font-size:11px;">req-a9c2b1d4e5f6</span></div>
+      </div>
+    </div>
+    <div class="card card-sm">
+      <div class="label">Actor</div>
+      <div style="margin-top:10px;display:flex;flex-direction:column;gap:7px;font-size:12px;">
+        <div><span style="color:var(--text-3);">Type</span><br><span class="tag tag-blue" style="font-size:10px;margin-top:3px;">consumer</span></div>
+        <div><span style="color:var(--text-3);">ID</span><br><span class="mono">****-a7c2-****</span></div>
+        <div><span style="color:var(--text-3);">IP (masked)</span><br><span class="mono">103.x.x.x</span></div>
+        <div><span style="color:var(--text-3);">Geo</span><br><span>Mumbai, MH</span></div>
+        <div><span style="color:var(--text-3);">UA</span><br><span class="mono" style="font-size:10px;">Chrome/122 · macOS</span></div>
+        <div><span style="color:var(--text-3);">Device hash</span><br><span class="mono" style="font-size:10px;">d4f3...a8b2</span></div>
+      </div>
+    </div>
+    <div class="card card-sm">
+      <div class="label">Subject</div>
+      <div style="margin-top:10px;display:flex;flex-direction:column;gap:7px;font-size:12px;">
+        <div><span style="color:var(--text-3);">Type</span><br><span class="tag tag-navy" style="font-size:10px;margin-top:3px;">consent</span></div>
+        <div><span style="color:var(--text-3);">Consent ID</span><br><span class="mono">CNS-2026-HD-00247</span></div>
+        <div><span style="color:var(--text-3);">Consumer ref</span><br><span class="mono">****b82f (encrypted)</span></div>
+        <div><span style="color:var(--text-3);">Form version</span><br><span>v2.1</span></div>
+        <div><span style="color:var(--text-3);">Captured via</span><br><span>web_form</span></div>
+      </div>
+    </div>
+    <div class="card card-sm">
+      <div class="label">Organisation</div>
+      <div style="margin-top:10px;display:flex;flex-direction:column;gap:7px;font-size:12px;">
+        <div style="font-weight:600;color:var(--navy);">HDFC Bank</div>
+        <div><span style="color:var(--text-3);">Industry</span><br><span>Banking · BFSI</span></div>
+        <div><span style="color:var(--text-3);">Plan</span><br><span class="tag tag-teal" style="font-size:10px;">Growth</span></div>
+        <div><span style="color:var(--text-3);">Org ID</span><br><span class="mono" style="font-size:10px;">org-hdfc-0001</span></div>
+        <div><span style="color:var(--text-3);">Tenant</span><br><span class="mono" style="font-size:10px;">hdfc-prod</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 2: Action + State Change side by side -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+    <div class="card card-sm">
+      <div class="label">Action Details</div>
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:10px;font-size:13px;">
+        <div style="background:#F8FAFC;border-radius:8px;padding:12px;">
+          <div style="font-size:10px;color:var(--text-3);margin-bottom:4px;">WHAT</div>
+          <div>Consent withdrawn for purposes: <span class="tag tag-orange" style="font-size:11px;">marketing</span> <span class="tag tag-orange" style="font-size:11px;">analytics</span></div>
+        </div>
+        <div style="background:#F8FAFC;border-radius:8px;padding:12px;">
+          <div style="font-size:10px;color:var(--text-3);margin-bottom:4px;">WHY</div>
+          <div>Consumer request via self-service portal</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div style="background:#F8FAFC;border-radius:8px;padding:12px;">
+            <div style="font-size:10px;color:var(--text-3);margin-bottom:4px;">HOW</div>
+            <div class="mono" style="font-size:12px;">web_portal</div>
+          </div>
+          <div style="background:#F8FAFC;border-radius:8px;padding:12px;">
+            <div style="font-size:10px;color:var(--text-3);margin-bottom:4px;">CHANNEL</div>
+            <div class="mono" style="font-size:12px;">web</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card card-sm">
+      <div class="label">State Change</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+        <div style="background:#FEF2F2;border-radius:8px;padding:12px;border:1px solid #FECACA;">
+          <div style="font-size:10px;font-weight:700;color:var(--red);margin-bottom:8px;">BEFORE</div>
+          <div style="font-size:12px;font-family:'DM Mono',monospace;color:var(--text);line-height:1.8;">
+            status: "active"<br>
+            purposes_active:<br>
+            &nbsp;&nbsp;["kyc",<br>
+            &nbsp;&nbsp;&nbsp;"marketing",<br>
+            &nbsp;&nbsp;&nbsp;"analytics"]<br>
+            channels_active:<br>
+            &nbsp;&nbsp;["email","sms"]
+          </div>
+        </div>
+        <div style="background:#F0FDF4;border-radius:8px;padding:12px;border:1px solid #BBF7D0;">
+          <div style="font-size:10px;font-weight:700;color:var(--green);margin-bottom:8px;">AFTER</div>
+          <div style="font-size:12px;font-family:'DM Mono',monospace;color:var(--text);line-height:1.8;">
+            status: "withdrawn"<br>
+            purposes_active:<br>
+            &nbsp;&nbsp;["kyc"]<br>
+            purposes_withdrawn:<br>
+            &nbsp;&nbsp;["marketing",<br>
+            &nbsp;&nbsp;&nbsp;"analytics"]<br>
+            withdrawn_at: timestamp
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 3: Integrity + Raw JSON -->
+  <div style="display:grid;grid-template-columns:1fr 2fr;gap:16px;margin-bottom:20px;">
+    <div class="card card-sm">
+      <div class="label">Integrity & Tamper Detection</div>
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:12px;">
+        <div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;padding:12px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <span style="font-size:16px;">✅</span>
+            <span style="font-weight:600;font-size:13px;color:var(--green);">Hash Verified</span>
+          </div>
+          <div style="font-size:10px;color:var(--text-3);margin-bottom:4px;">SHA-256 HASH</div>
+          <div class="mono" style="font-size:10px;word-break:break-all;color:var(--text-2);">abc123def456ghi789...xyz000</div>
+          <button class="btn btn-ghost btn-sm" style="margin-top:8px;font-size:11px;width:100%;">📋 Copy</button>
+        </div>
+        <div style="background:#F8FAFC;border-radius:8px;padding:12px;">
+          <div style="font-size:10px;color:var(--text-3);margin-bottom:4px;">HASH CHAIN LINK</div>
+          <div style="font-size:12px;">← EVT-47282 (previous)</div>
+          <div style="font-size:12px;color:var(--text-3);">→ EVT-47284 (next)</div>
+        </div>
+        <div style="background:#F8FAFC;border-radius:8px;padding:12px;">
+          <div style="font-size:10px;color:var(--text-3);margin-bottom:4px;">SIGNED BY</div>
+          <div class="mono" style="font-size:11px;">sahamati-audit-service</div>
+          <div style="font-size:10px;color:var(--text-3);margin-top:4px;">Chain verified at 03:00 IST · 12 Mar 2026</div>
+        </div>
+      </div>
+    </div>
+    <div class="card card-sm">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <div class="label" style="margin:0;">Raw JSON Payload <span style="font-size:10px;font-weight:400;color:var(--text-3);">— Elasticsearch Document (E-04 §3.1 schema)</span></div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-ghost btn-sm">📋 Copy</button>
+          <button class="btn btn-ghost btn-sm">⬇ Download</button>
+        </div>
+      </div>
+      <div style="background:#0F172A;border-radius:10px;padding:16px;font-family:'DM Mono',monospace;font-size:11px;line-height:1.9;color:#E2E8F0;overflow-x:auto;">
+        <span style="color:#7DD3FC;">{</span><br>
+        &nbsp;&nbsp;<span style="color:#93C5FD;">"event_id"</span>: <span style="color:#86EFAC;">"uuid-v4-47283"</span>,<br>
+        &nbsp;&nbsp;<span style="color:#93C5FD;">"timestamp"</span>: <span style="color:#86EFAC;">"2026-03-12T09:30:00.142Z"</span>,<br>
+        &nbsp;&nbsp;<span style="color:#93C5FD;">"timezone"</span>: <span style="color:#86EFAC;">"Asia/Kolkata"</span>,<br>
+        &nbsp;&nbsp;<span style="color:#93C5FD;">"event_code"</span>: <span style="color:#FDE68A;">"CONSENT_WITHDRAWN"</span>,<br>
+        &nbsp;&nbsp;<span style="color:#93C5FD;">"event_category"</span>: <span style="color:#86EFAC;">"consent"</span>,<br>
+        &nbsp;&nbsp;<span style="color:#93C5FD;">"severity"</span>: <span style="color:#86EFAC;">"INFO"</span>,<br>
+        &nbsp;&nbsp;<span style="color:#93C5FD;">"organization"</span>: <span style="color:#7DD3FC;">{</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#93C5FD;">"id"</span>: <span style="color:#86EFAC;">"org-hdfc-0001"</span>,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#93C5FD;">"name"</span>: <span style="color:#86EFAC;">"HDFC Bank"</span>,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#93C5FD;">"industry"</span>: <span style="color:#86EFAC;">"banking"</span><br>
+        &nbsp;&nbsp;<span style="color:#7DD3FC;">}</span>,<br>
+        &nbsp;&nbsp;<span style="color:#93C5FD;">"actor"</span>: <span style="color:#7DD3FC;">{</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#93C5FD;">"type"</span>: <span style="color:#86EFAC;">"consumer"</span>,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#93C5FD;">"id"</span>: <span style="color:#86EFAC;">"****-a7c2-****"</span>,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#93C5FD;">"ip_address"</span>: <span style="color:#86EFAC;">"103.x.x.x"</span>,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#93C5FD;">"geo_location"</span>: <span style="color:#86EFAC;">"Mumbai, MH"</span><br>
+        &nbsp;&nbsp;<span style="color:#7DD3FC;">}</span>,<br>
+        &nbsp;&nbsp;<span style="color:#93C5FD;">"action"</span>: <span style="color:#7DD3FC;">{</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#93C5FD;">"what"</span>: <span style="color:#86EFAC;">"Withdrew: [marketing, analytics]"</span>,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#93C5FD;">"why"</span>: <span style="color:#86EFAC;">"consumer_request"</span>,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#93C5FD;">"how"</span>: <span style="color:#86EFAC;">"web_portal"</span><br>
+        &nbsp;&nbsp;<span style="color:#7DD3FC;">}</span>,<br>
+        &nbsp;&nbsp;<span style="color:#93C5FD;">"integrity"</span>: <span style="color:#7DD3FC;">{</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#93C5FD;">"hash"</span>: <span style="color:#86EFAC;">"SHA256:abc123..."</span>,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#93C5FD;">"hash_chain"</span>: <span style="color:#86EFAC;">"SHA256:prev+this"</span>,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#93C5FD;">"signed_by"</span>: <span style="color:#86EFAC;">"sahamati-audit-svc"</span><br>
+        &nbsp;&nbsp;<span style="color:#7DD3FC;">}</span><br>
+        <span style="color:#7DD3FC;">}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 4: Downstream Impact + Related Events -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div class="card card-sm">
+      <div class="label">Downstream Impact</div>
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px;font-size:13px;">
+        <div style="background:#F0FDF4;border-radius:8px;padding:12px;display:flex;align-items:flex-start;gap:10px;">
+          <span style="color:var(--green);flex-shrink:0;">✅</span>
+          <div>
+            <div style="font-weight:500;">Webhook → HDFC Analytics Pvt Ltd</div>
+            <div class="mono" style="font-size:11px;color:var(--text-3);">POST /webhooks/consent-update · 200 OK · 142ms</div>
+          </div>
+        </div>
+        <div style="background:#F0FDF4;border-radius:8px;padding:12px;display:flex;align-items:flex-start;gap:10px;">
+          <span style="color:var(--green);flex-shrink:0;">✅</span>
+          <div>
+            <div style="font-weight:500;">Webhook → CIBIL Limited</div>
+            <div class="mono" style="font-size:11px;color:var(--text-3);">POST /consent/revoke · 200 OK · 89ms</div>
+          </div>
+        </div>
+        <div style="background:#FEF3C7;border-radius:8px;padding:12px;display:flex;align-items:flex-start;gap:10px;">
+          <span style="color:var(--orange);flex-shrink:0;">⏳</span>
+          <div>
+            <div style="font-weight:500;">Processing halt scheduled</div>
+            <div class="mono" style="font-size:11px;color:var(--text-3);">2026-03-12 09:35:00 IST (5-min SLA)</div>
+          </div>
+        </div>
+        <div style="background:#EFF6FF;border-radius:8px;padding:12px;display:flex;align-items:flex-start;gap:10px;">
+          <span style="color:#1D4ED8;flex-shrink:0;">📱</span>
+          <div>
+            <div style="font-weight:500;">Consumer notification sent</div>
+            <div class="mono" style="font-size:11px;color:var(--text-3);">SMS +91 98765 XXXXX · Delivered · 09:30:01</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card card-sm">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <div class="label" style="margin:0;">Related Events — Consent CNS-2026-HD-00247</div>
+        <button class="btn btn-ghost btn-sm" onclick="go('audit-trail')">View Full Trail →</button>
+      </div>
+      <div style="position:relative;padding-left:24px;">
+        <!-- Timeline line -->
+        <div style="position:absolute;left:9px;top:0;bottom:0;width:2px;background:var(--border);"></div>
+        ${[
+          ['09:28:41','EVT-47281','CONSENT_VALIDATED','DEBUG','Real-time check before withdrawal','var(--text-3)','var(--border)',false],
+          ['09:29:55','EVT-47282','USER_LOGIN','INFO','Consumer authenticated (web)','var(--text-2)','var(--border)',false],
+          ['09:30:00','EVT-47283','CONSENT_WITHDRAWN','INFO','Withdrew: marketing, analytics','var(--navy)','var(--navy)',true],
+          ['09:30:01','EVT-47284','CONSENT_RENOTIFICATION_SENT','INFO','Webhook dispatched to 2 processors','var(--text-2)','var(--border)',false],
+          ['09:30:05','EVT-47285','AUDIT_LOG_ACCESS','DEBUG','Compliance manager viewed audit','var(--text-3)','var(--border)',false],
+        ].map(([time,id,code,sev,desc,textColor,dotColor,isCurrent])=>`
+        <div style="position:relative;padding:0 0 16px 20px;${isCurrent?'background:#F0F9FF;border-radius:8px;padding:8px 8px 8px 20px;margin:-8px;margin-bottom:8px;border:1px solid #BFDBFE;':''}">
+          <div style="position:absolute;left:0;top:4px;width:12px;height:12px;border-radius:50%;background:${isCurrent?'var(--navy)':'var(--border)'};border:2px solid ${isCurrent?'var(--navy)':'#fff'};box-shadow:0 0 0 2px ${dotColor};"></div>
+          <div class="mono" style="font-size:10px;color:var(--text-3);">${time}</div>
+          <div style="display:flex;align-items:center;gap:6px;margin-top:2px;">
+            <span class="mono tag tag-gray" style="font-size:10px;">${code}</span>
+            ${isCurrent?'<span style="font-size:10px;color:var(--navy);font-weight:600;">← You are here</span>':''}
+          </div>
+          <div style="font-size:12px;color:${textColor};margin-top:2px;">${desc}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>
+
+  <div class="prd-note" style="margin-top:20px;">
+    <span class="prd-ref">E-04 §3.1</span>
+    <span>Audit Log Event Detail — full E-04 §3.1 schema rendered (event_id, actor, subject, action, before/after state, integrity hash chain). Raw JSON with syntax highlighting. Downstream impact (webhooks + processing halt). Related events timeline. Export CSV/JSON/PDF. DPO role-based PII unmask. Access via clicking any row in Audit Trail screen.</span>
+  </div>
+</div>
+
+<div id="screen-rights-queue" class="screen">
+  <div class="stats-row stats-row-3" style="margin-bottom:20px;">
+    <div class="stat-card"><div class="stat-label">Total Open</div><div class="stat-num">7</div></div>
+    <div class="stat-card"><div class="stat-label">⚠️ Due &lt;5 days</div><div class="stat-num" style="color:var(--orange);">3</div></div>
+    <div class="stat-card"><div class="stat-label">SLA Breach Rate</div><div class="stat-num" style="color:var(--green);">0%</div><div class="stat-sub">Last 90 days</div></div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Request ID</th><th>Type</th><th>Consumer</th><th>Day</th><th>Status</th><th>SLA</th><th>Actions</th></tr></thead>
+      <tbody>
+        ${[
+          ['SAM-DR-2026-00142','Access','A**a K**r',18,'Under Review',60,'tag-green'],
+          ['SAM-DR-2026-00147','Erasure','R**n M**a',25,'Acknowledged',17,'tag-orange'],
+          ['SAM-DR-2026-00151','Correction','P**a S**a',27,'Under Review',10,'tag-red'],
+          ['SAM-DR-2026-00155','Access','V**h G**a',12,'Received',60,'tag-green'],
+          ['SAM-DR-2026-00158','Erasure','A**v P**l',5,'Received',83,'tag-green'],
+        ].map(r=>`<tr>
+          <td class="mono" style="font-size:12px;">${r[0]}</td>
+          <td><span class="tag ${r[1]==='Erasure'?'tag-red':r[1]==='Correction'?'tag-orange':'tag-blue'}" style="font-size:11px;">${r[1]}</span></td>
+          <td style="font-size:13px;">${r[2]}</td>
+          <td style="font-weight:600;color:${r[3]>25?'var(--red)':r[3]>20?'var(--orange)':'var(--text)'};">Day ${r[3]}</td>
+          <td><span class="tag tag-blue" style="font-size:11px;">${r[4]}</span></td>
+          <td><span class="tag ${r[6]}" style="font-size:11px;">${r[5]}% left</span></td>
+          <td><button class="btn btn-ghost btn-sm" style="font-size:11px;">Open</button></td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="screen-dpo-4eyes" class="screen">
+  <div class="two-col">
+    <div class="card">
+      <div class="section-title">Pending 4-Eyes Approvals</div>
+      <div class="alert alert-warning"><span class="alert-icon">👥</span><div>These actions require a second DPO/Super Admin approval. You cannot approve your own requests.</div></div>
+      ${[
+        {action:'Bulk Erasure — 4,200 records',requestor:'Anjali Gupta (Compliance Mgr)',risk:'HIGH',timeout:'Expires in 18h'},
+        {action:'DPA Termination — DataSync Ltd',requestor:'Rajan Mehta (DPO)',risk:'CRITICAL',timeout:'Expires in 6h'},
+        {action:'Sub-Processor Approval — AWS Singapore',requestor:'Anjali Gupta',risk:'MEDIUM',timeout:'Expires in 22h'},
+      ].map(a=>`
+      <div class="card card-sm flag-${a.risk.toLowerCase()}" style="margin-bottom:12px;">
+        <div style="font-weight:600;font-size:13px;margin-bottom:4px;">${a.action}</div>
+        <div style="font-size:12px;color:var(--text-2);">Requested by: ${a.requestor}</div>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:10px;"><span class="tag ${a.risk==='CRITICAL'?'tag-red':a.risk==='HIGH'?'tag-orange':'tag-blue'}" style="font-size:10px;">${a.risk}</span><span style="font-size:11px;color:var(--text-3);">${a.timeout}</span><div style="flex:1;"></div><button class="btn btn-ghost btn-sm">Reject</button><button class="btn btn-teal btn-sm">✓ Approve</button></div>
+      </div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="section-title">Approval Timeout Rules</div>
+      <div class="timeline" style="padding-left:20px;">
+        <div class="timeline-item"><div class="timeline-dot" style="background:var(--teal);"></div><div class="timeline-title">Request Created</div><div class="timeline-sub">Notification sent to all eligible approvers</div></div>
+        <div class="timeline-item"><div class="timeline-dot" style="background:var(--orange);"></div><div class="timeline-title">T + 24h: Escalate</div><div class="timeline-sub">Alert sent to Super Admin if no approval</div></div>
+        <div class="timeline-item" style="border-left-color:transparent;"><div class="timeline-dot" style="background:var(--red);"></div><div class="timeline-title">T + 48h: Auto-Reject (Safe Default)</div><div class="timeline-sub">Request auto-rejected. No action taken. Audit log updated.</div></div>
+      </div>
+      <div class="alert alert-info" style="margin-top:16px;"><span class="alert-icon">ℹ️</span><div><strong>Safe Default:</strong> Auto-reject (not auto-approve) is the safe default for unanswered approvals. This prevents unilateral high-risk actions.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+   MULTI-CHANNEL SCREENS
+═══════════════════════════════════════════════════════════════ -->
+
+<div id="screen-sms-flow" class="screen">
+  <div class="phone-wrap">
+    <div class="phone-outer">
+      <div class="phone-btn mute"></div><div class="phone-btn vol-u"></div><div class="phone-btn vol-d"></div><div class="phone-btn power"></div>
+      <div class="phone-inner" style="--phone-bg:#E8EFF5;">
+        <div class="phone-island"></div>
+        <div class="phone-status" style="background:#1C1C1E;color:#fff;"><span>9:41</span><div class="phone-status-icons">●●●● WiFi 🔋</div></div>
+        <div class="phone-body" style="background:#E8EFF5;padding:16px 14px;">
+          <!-- Incoming SMS -->
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+            <div style="width:36px;height:36px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;">AX</div>
+            <div style="font-size:13px;font-weight:600;">AXISBN</div>
+          </div>
+          <div style="background:#fff;border-radius:12px 12px 2px 12px;padding:14px;margin-bottom:6px;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+            <div style="font-size:13px;line-height:1.7;">Hi Ananya, Axis Bank needs your consent for Loan Application. Tap to review and confirm your choices:</div>
+            <div style="margin-top:10px;"><a style="color:var(--teal);font-size:13px;font-weight:600;">sahamati.in/c/AX7K9P →</a></div>
+            <div style="font-size:10px;color:#999;margin-top:6px;">To opt out of ALL Axis Bank consents: STOP-AXISBN · For help: HELP</div>
+          </div>
+          <div style="font-size:10px;color:#999;text-align:right;margin-bottom:18px;">9:38 AM ✓✓</div>
+          <!-- Inline short consent form -->
+          <div style="background:#fff;border-radius:14px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+            <div style="font-weight:700;font-size:15px;margin-bottom:3px;">Axis Bank Consent</div>
+            <div style="font-size:12px;color:var(--text-2);margin-bottom:14px;">Loan Application · Short form</div>
+            ${[['KYC Verification','Required ✓',true],['Loan Processing','Required ✓',true],['Marketing Offers','Optional — tap to add',false]].map(([p,sub,checked])=>`
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);">
+              <div style="width:24px;height:24px;border-radius:50%;background:${checked?'var(--teal)':'var(--border)'};display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;flex-shrink:0;">${checked?'✓':'+'}</div>
+              <div><div style="font-size:13px;">${p}</div><div style="font-size:11px;color:var(--text-3);">${sub}</div></div>
+            </div>`).join('')}
+            <button class="btn btn-teal btn-full" style="margin-top:14px;border-radius:10px;" onclick="go('widget-success')">Confirm Consent</button>
+          </div>
+          <div style="font-size:10px;color:#999;text-align:center;margin-top:10px;">Secured by Sahamati · DPDPA 2023</div>
+        </div>
+        <div class="phone-home" style="background:#E8EFF5;"></div>
+      </div>
+    </div>
+  </div>
+  <div class="prd-note"><span class="prd-ref">E-11 §3.1</span><span>SMS consent flow — deep-link opens inline consent form. STOP-AXISBN only withdraws Axis Bank consents (E-11 C111 fix). Short form shows statutory+optional. "Confirm Consent" → widget-success.</span></div>
+</div>
+
+<div id="screen-ivr-flow" class="screen">
+  <div style="max-width:680px;margin:0 auto;">
+    <div class="card" style="margin-bottom:16px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <div><div style="font-weight:600;">IVR Session — Consent Capture</div><div style="font-size:12px;color:var(--text-2);">Exotel · Caller: +91 98765 43210 · Duration: 2m 18s</div></div>
+        <span class="tag tag-green">DTMF Masked</span>
+      </div>
+    </div>
+    <div class="ivr-wrap">
+      <div class="ivr-note">[IVR SESSION TRANSCRIPT — HDFC Bank — 12 Mar 2026 09:41 IST]</div>
+      <div class="ivr-note">[Recording: Audio retained 14 days · Metadata retained 7 years · DTMF keys [*] masked]</div><br>
+      <div class="ivr-system">SYSTEM: Namaskar! Aap ka swagat hai HDFC Bank ke consent centre mein.</div>
+      <div class="ivr-system">         Welcome to HDFC Bank's consent management line.</div>
+      <div class="ivr-system">         For English, press 1. Hindi ke liye, press 2. Tamil-il, press 3.</div>
+      <div class="ivr-consumer">CALLER:  [DTMF: 1] — <span class="ivr-note">English selected</span></div><br>
+      <div class="ivr-system">SYSTEM: You are calling about your loan application consent.</div>
+      <div class="ivr-system">         We need your permission for the following purposes:</div>
+      <div class="ivr-system">         1. KYC Verification — Required by law. Press 1 to acknowledge.</div>
+      <div class="ivr-system">         2. Loan Processing — Required for your application. Press 1 to acknowledge.</div>
+      <div class="ivr-system">         3. Marketing Offers — Optional. Press 1 to accept, press 2 to decline.</div>
+      <div class="ivr-consumer">CALLER:  [DTMF: 1] — <span class="ivr-note">KYC acknowledged</span></div>
+      <div class="ivr-consumer">CALLER:  [DTMF: 1] — <span class="ivr-note">Loan Processing acknowledged</span></div>
+      <div class="ivr-consumer">CALLER:  [DTMF: 2] — <span class="ivr-note">Marketing DECLINED</span></div><br>
+      <div class="ivr-system">SYSTEM: Thank you. To confirm: KYC and Loan Processing — YES. Marketing — NO.</div>
+      <div class="ivr-system">         Press 1 to confirm. Press 2 to restart.</div>
+      <div class="ivr-consumer">CALLER:  [DTMF: 1] — <span class="ivr-note">Confirmed</span></div><br>
+      <div class="ivr-system">SYSTEM: Your consent has been recorded. Reference: CNS-2026-IVR-00091.</div>
+      <div class="ivr-system">         A confirmation SMS will be sent to your registered number. Thank you.</div><br>
+      <div class="ivr-note">[SESSION END · DTMF keys: Only consent selection keys retained · Audio: Queued for 14-day purge]</div>
+      <div class="ivr-note">[Consent record: CNS-2026-IVR-00091 · Channel: IVR · Captured via: Exotel · TTS: Sarvam AI]</div>
+    </div>
+    <div class="alert alert-info" style="margin-top:16px;"><span class="alert-icon">ℹ️</span><div><strong>E-11 C112/C113:</strong> DTMF keys other than consent choices purged within 5 min. Audio recording purged at day 14. Metadata (transcript + consent record) retained 7 years per DPDPA.</div></div>
+  </div>
+</div>
+
+<div id="screen-whatsapp-flow" class="screen">
+  <div class="phone-wrap">
+    <div class="phone-outer">
+      <div class="phone-btn mute"></div><div class="phone-btn vol-u"></div><div class="phone-btn vol-d"></div><div class="phone-btn power"></div>
+      <div class="phone-inner">
+        <div class="phone-island"></div>
+        <div class="phone-status" style="background:#075E54;color:#fff;"><span>9:41</span><div class="phone-status-icons">●●●● WiFi 🔋</div></div>
+        <div class="phone-body" style="background:#ECE5DD;padding:12px 14px;">
+          <!-- Header bar -->
+          <div style="background:#075E54;margin:-12px -14px 14px;padding:12px 16px;display:flex;align-items:center;gap:12px;">
+            <div style="width:38px;height:38px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;">HB</div>
+            <div><div style="color:#fff;font-weight:600;font-size:14px;">HDFC Bank — Official</div><div style="color:rgba(255,255,255,0.7);font-size:11px;">Verified Business Account ✓</div></div>
+          </div>
+          <!-- Message from bank -->
+          <div style="background:#DCF8C6;border-radius:2px 12px 12px 12px;padding:14px;margin-bottom:10px;box-shadow:0 1px 2px rgba(0,0,0,0.1);">
+            <div style="font-size:13px;line-height:1.7;margin-bottom:10px;">Hello Ananya! We need your consent for your savings account services.</div>
+            <div style="background:#fff;border-radius:8px;padding:12px;border-left:4px solid #25D366;">
+              <div style="font-weight:700;font-size:13px;margin-bottom:8px;">Consent Required</div>
+              <div style="font-size:12px;line-height:1.8;color:#555;">
+                📌 KYC Verification <span style="color:#25D366;">(Required)</span><br>
+                📌 Account Services <span style="color:#25D366;">(Required)</span><br>
+                📣 Marketing Offers <span style="color:#999;">(Your choice)</span><br>
+                📊 Transaction Analytics <span style="color:#999;">(Your choice)</span>
+              </div>
+            </div>
+            <button onclick="alert('E-11 C114 Fix: Full details MUST be viewed before accept/decline activate')" style="width:100%;background:#25D366;color:#fff;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:600;cursor:pointer;margin-top:12px;">📄 View Full Details (Required first)</button>
+            <div style="font-size:10px;color:#999;text-align:center;margin-top:6px;">Accept/Decline buttons activate after viewing</div>
+          </div>
+          <!-- User reply -->
+          <div style="background:#fff;border-radius:12px 2px 12px 12px;padding:12px;margin-left:40px;margin-bottom:10px;box-shadow:0 1px 2px rgba(0,0,0,0.1);">
+            <div style="font-size:13px;">OK, I've read the details</div>
+            <div style="font-size:10px;color:#999;text-align:right;margin-top:4px;">9:43 ✓✓</div>
+          </div>
+          <!-- Bank response with active accept buttons -->
+          <div style="background:#DCF8C6;border-radius:2px 12px 12px 12px;padding:14px;box-shadow:0 1px 2px rgba(0,0,0,0.1);">
+            <div style="font-size:13px;margin-bottom:12px;">Great! Please choose your preferences:</div>
+            <button onclick="go('widget-success')" style="width:100%;background:#25D366;color:#fff;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:6px;">✅ Accept Required + Optional</button>
+            <button onclick="go('widget-success')" style="width:100%;background:#fff;color:#075E54;border:2px solid #25D366;border-radius:8px;padding:10px;font-size:13px;font-weight:600;cursor:pointer;">✅ Accept Required Only</button>
+          </div>
+          <div style="font-size:10px;color:#999;text-align:center;margin-top:10px;">End-to-end encrypted · DPDPA Compliant · Secured by Sahamati</div>
+        </div>
+        <div class="phone-home" style="background:#ECE5DD;"></div>
+      </div>
+    </div>
+  </div>
+  <div class="prd-note"><span class="prd-ref">E-11 §3.3</span><span>WhatsApp flow (E-11 C114 fix) — "View Full Details" mandatory before accept buttons activate. Prevents dark pattern of accepting without reading notice. DPDPA §5. Accept → widget-success.</span></div>
+</div>
+
+<div id="screen-branch-flow" class="screen">
+  <div style="max-width:680px;margin:0 auto;">
+    <div class="alert alert-warning"><span class="alert-icon">📶</span><div><strong>Offline Mode Active</strong> — No network connectivity. Consents are being captured to encrypted local storage (AES-256-GCM). Will sync when connection is restored.</div></div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <div><div style="font-weight:600;font-size:16px;">In-Branch Consent Capture</div><div style="font-size:12px;color:var(--text-2);">HDFC Bank · Andheri West Branch · Mumbai</div></div>
+        <span class="tag tag-orange">🔴 Offline</span>
+      </div>
+      <div class="field-group"><div class="label">Supervisor ID (Mandatory)</div><input value="SUP-MUM-AW-007" placeholder="Branch Supervisor ID — required (API returns 422 without this)"></div>
+      <div class="field-group"><div class="label">Consumer Mobile (for linking)</div><input value="+91 98765 43210"></div>
+      <div class="field-group"><div class="label">Capture Timestamp</div><input value="12 Mar 2026 · 09:41 IST" disabled style="background:#F8FAFC;color:var(--text-3);">
+        <div style="font-size:11px;color:var(--text-3);margin-top:4px;">⚠️ Server-side validation: consents timestamped >72h ago at sync time will be rejected (anti-backdating)</div>
+      </div>
+      <div class="divider"></div>
+      <div class="label" style="margin-bottom:12px;">Purpose Selection</div>
+      ${[{n:'KYC Verification',t:'Statutory',l:true},{n:'Account Opening',t:'Business',l:true},{n:'Marketing SMS',t:'Marketing',l:false}].map(p=>`
+      <div class="purpose-row">
+        <div class="pr-info"><div class="pr-name">${p.n}</div><div class="pr-meta"><span class="tag ${p.t==='Statutory'?'tag-navy':p.t==='Business'?'tag-blue':'tag-purple'}" style="font-size:10px;">${p.t}</span>${p.l?'<span class="tag tag-gray" style="font-size:10px;">🔒</span>':''}</div></div>
+        <label class="toggle"><input type="checkbox" checked ${p.l?'disabled':''}><div class="toggle-slider"></div></label>
+      </div>`).join('')}
+      <div style="margin-top:16px;"><div style="font-size:13px;color:var(--text-2);margin-bottom:12px;">Consumer Signature (please sign below):</div><div style="height:80px;border:2px dashed var(--border);border-radius:8px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;color:var(--text-3);font-size:13px;">Touch or stylus to sign</div></div>
+      <button class="btn btn-teal btn-full" style="margin-top:16px;">✓ Capture Consent (Offline)</button>
+      <div style="font-size:11px;color:var(--text-3);text-align:center;margin-top:8px;">3 consents pending sync · Will upload when online</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+   ANALYTICS SCREENS
+═══════════════════════════════════════════════════════════════ -->
+
+<div id="screen-health-score" class="screen">
+  <div class="two-col-3-7">
+    <div class="card" style="text-align:center;">
+      <div class="label" style="margin-bottom:16px;text-align:left;">Consent Health Score (E-12)</div>
+      <div class="health-score-circle">
+        <div class="health-score-inner">
+          <div class="health-score-num">82</div>
+          <div style="font-size:11px;color:var(--green);font-weight:500;margin-top:4px;">GOOD</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;text-align:left;margin-top:8px;">
+        ${[['DPA Coverage (25pts)','23/25','var(--green)'],['SLA Compliance (20pts)','20/20','var(--green)'],['Expiry Management (20pts)','16/20','var(--teal)'],['Withdrawal SLA (15pts)','15/15','var(--green)'],['Data Rights Resolution (20pts)','14/20','var(--orange)'],['Red Flag Deductions','−6','var(--red)']].map(c=>`
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);">
+          <span style="font-size:12px;">${c[0]}</span>
+          <span style="font-size:13px;font-weight:600;color:${c[2]};">${c[1]}</span>
+        </div>`).join('')}
+      </div>
+      <div style="margin-top:12px;padding:10px;background:var(--bg);border-radius:8px;font-size:11px;color:var(--text-2);">Score bands: 90–100 GREEN · 70–89 YELLOW · 50–69 ORANGE · 0–49 RED</div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="label" style="margin-bottom:12px;">Score Trend — Last 8 Weeks</div>
+        <div style="display:flex;align-items:flex-end;gap:8px;height:100px;padding-bottom:8px;">
+          ${[68,72,75,74,78,80,79,82].map((v,i)=>`<div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;"><div style="font-size:10px;color:var(--text-3);">${v}</div><div style="height:${v}%;background:${i===7?'var(--green)':v>=80?'var(--teal)':v>=70?'var(--orange)':'var(--red)'};border-radius:4px 4px 0 0;width:100%;opacity:${i===7?1:0.6};"></div><div style="font-size:10px;color:var(--text-3);">W${i+1}</div></div>`).join('')}
+        </div>
+      </div>
+      <div class="card">
+        <div class="label" style="margin-bottom:12px;">Score Improvement Actions</div>
+        ${[['Resolve RF-C01 (DPA Expired — PayU)','+4 pts','var(--red)'],['Complete 2 pending rights requests','+2 pts','var(--orange)'],['Renew CIBIL DPA before expiry','Prevents −4','var(--gold)'],['Resolve audit scheduling for Experian','+2 pts','var(--text-2)']].map(a=>`
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);">
+          <div style="font-size:13px;">${a[0]}</div>
+          <span class="tag" style="background:${a[2]}20;color:${a[2]};font-size:11px;">${a[1]}</span>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="screen-compliance-report" class="screen">
+  <div class="two-col-3-7">
+    <div class="card">
+      <div class="label" style="margin-bottom:12px;">Annual DPDPA Report 2025</div>
+      <div style="font-size:13px;color:var(--text-2);margin-bottom:16px;">Auto-generated: January 15, 2026</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        ${['Executive Summary','Consent Operations Overview','Data Rights Requests Log','Processor Compliance Status','Breach Incident Register','Security Audit Summary','Red Flag Resolution Report','Consumer Complaints & Grievances','DPO Certification Statement'].map((s,i)=>`
+        <div style="display:flex;gap:10px;align-items:center;padding:8px 10px;background:var(--bg);border-radius:6px;cursor:pointer;" onmouseover="this.style.background='#EFF6FF'" onmouseout="this.style.background='var(--bg)'">
+          <span style="font-size:12px;color:var(--text-3);width:18px;">§${i+1}</span>
+          <span style="font-size:13px;">${s}</span>
+          <span style="margin-left:auto;color:var(--text-3);">→</span>
+        </div>`).join('')}
+      </div>
+      <div style="display:flex;gap:8px;margin-top:16px;"><button class="btn btn-teal btn-sm" style="flex:1;">⬇ PDF</button><button class="btn btn-ghost btn-sm" style="flex:1;">⬇ JSON</button></div>
+    </div>
+    <div class="card">
+      <div class="label" style="margin-bottom:16px;">§2 — Consent Operations Overview (2025)</div>
+      <div class="stats-row" style="grid-template-columns:1fr 1fr;margin-bottom:16px;">
+        <div class="stat-card"><div class="stat-label">Total Consents Captured</div><div class="stat-num">1,24,892</div></div>
+        <div class="stat-card"><div class="stat-label">Active as of Dec 31</div><div class="stat-num">98,441</div></div>
+        <div class="stat-card"><div class="stat-label">Withdrawals Processed</div><div class="stat-num">8,219</div></div>
+        <div class="stat-card"><div class="stat-label">Re-consent Campaigns</div><div class="stat-num">3</div></div>
+      </div>
+      <div class="label" style="margin-bottom:10px;">Purpose Acceptance Rates</div>
+      ${[['KYC / AML (Statutory)','98.1%'],['Loan / Account Processing','87.4%'],['Marketing Communications','51.2%'],['Analytics & Profiling','38.9%']].map(p=>`
+      <div style="margin-bottom:10px;"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;"><span>${p[0]}</span><span style="font-weight:600;">${p[1]}</span></div><div style="height:6px;background:var(--border);border-radius:4px;"><div style="width:${p[1]};height:100%;background:var(--teal);border-radius:4px;"></div></div></div>`).join('')}
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+   PHASE 3 — AI SCREENS
+═══════════════════════════════════════════════════════════════ -->
+
+<div id="screen-ai-recommendations" class="screen">
+  <div class="two-col">
+    <div class="card">
+      <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:16px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--navy),var(--teal));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">✨</div>
+        <div><div style="font-weight:600;">AI Consent Recommendations (E-15)</div><div style="font-size:12px;color:var(--text-2);">Based on 250+ similar BFSI organisations</div></div>
+      </div>
+      <div class="alert alert-success"><span class="alert-icon">💡</span><div><strong>3 recommendations for your Loan Application form</strong> could increase acceptance rate by ~12%</div></div>
+      ${[
+        {title:'Add "Credit Score Benefit" purpose',detail:'87% of similar NBFCs include this purpose. Orgs that added it saw +8% acceptance on analytics purposes.',action:'Add Purpose'},
+        {title:'Shorten Marketing purpose description',detail:'Your current marketing purpose description is 142 words. Orgs with <80 words see 15% higher acceptance.',action:'Simplify'},
+        {title:'Set consent validity to 1 year (not 6 months)',detail:'1-year validity reduces re-consent fatigue. 73% of BFSI orgs use 1-year for marketing purposes.',action:'Update'},
+      ].map(r=>`
+      <div class="card card-sm" style="margin-bottom:10px;border-left:4px solid var(--teal);">
+        <div style="font-weight:500;font-size:13px;margin-bottom:6px;">${r.title}</div>
+        <div style="font-size:12px;color:var(--text-2);margin-bottom:10px;">${r.detail}</div>
+        <div style="display:flex;gap:8px;"><button class="btn btn-teal btn-sm" style="font-size:12px;">${r.action}</button><button class="btn btn-ghost btn-sm" style="font-size:12px;">Dismiss</button></div>
+      </div>`).join('')}
+      <div style="font-size:11px;color:var(--text-3);margin-top:8px;">Recommendations use anonymised, k-anonymous (k≥5) aggregated data. DPO approval required for A/B testing.</div>
+    </div>
+    <div class="card">
+      <div class="label" style="margin-bottom:12px;">A/B Test Setup — DPO Approval Required</div>
+      <div class="alert alert-warning"><span class="alert-icon">⚠️</span><div>Both test variants must independently pass DPDPA compliance check before activation. DPO sign-off is mandatory.</div></div>
+      <div class="field-group"><div class="label">Test Name</div><input value="Marketing description length — Short vs Long"></div>
+      <div class="two-col"><div class="card card-sm" style="border-color:var(--navy);"><div class="ann-tag">Variant A (Control)</div><div style="font-size:13px;">Current long description (142 words)</div><div class="tag tag-green" style="margin-top:8px;">✓ DPDPA Compliant</div></div><div class="card card-sm" style="border-color:var(--teal);"><div class="ann-tag" style="background:var(--teal);">Variant B (Test)</div><div style="font-size:13px;">Short description &lt;80 words</div><div class="tag tag-green" style="margin-top:8px;">✓ DPDPA Compliant</div></div></div>
+      <div class="field-group" style="margin-top:12px;"><div class="label">Traffic Split</div><input value="50% / 50%"></div>
+      <div class="field-group"><div class="label">Test Duration</div><select><option>14 days</option><option>21 days</option><option>30 days</option></select></div>
+      <button class="btn btn-primary btn-full">Submit for DPO Approval →</button>
+    </div>
+  </div>
+</div>
+
+<div id="screen-enforcement-api" class="screen">
+  <div class="stats-row">
+    <div class="stat-card highlight"><div class="stat-label">API Uptime</div><div class="stat-num" style="color:var(--green);">99.99%</div><div class="stat-sub">Last 30 days</div></div>
+    <div class="stat-card"><div class="stat-label">p99 Latency</div><div class="stat-num">42ms</div><div class="stat-sub">Target: &lt;50ms ✓</div></div>
+    <div class="stat-card"><div class="stat-label">Requests Today</div><div class="stat-num">4.2M</div><div class="stat-sub">Peak: 12,400/min</div></div>
+    <div class="stat-card"><div class="stat-label">DENY Rate</div><div class="stat-num" style="color:var(--orange);">8.2%</div><div class="stat-sub">Withdrawn/expired consents</div></div>
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <div class="label" style="margin-bottom:12px;">Degradation Mode — CRITICAL Configuration</div>
+      <div class="alert alert-danger"><span class="alert-icon">🚨</span><div><strong>E-16 C133 Fix:</strong> Safe default is DENY (not ALLOW) during API outage for non-statutory processing.</div></div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+        ${[['Marketing processing','DENY (safe default)','var(--red)'],['Analytics processing','DENY (safe default)','var(--red)'],['Profiling processing','DENY (safe default)','var(--red)'],['Statutory/KYC processing','ALLOW (legal obligation)','var(--green)'],['Account services','ALLOW (contract)','var(--green)']].map(r=>`
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:${r[2]==='var(--green)'?'#F0FDF4':'#FEF2F2'};border-radius:8px;border:1px solid ${r[2]==='var(--green)'?'#BBF7D0':'#FECACA'};">
+          <span style="font-size:13px;">${r[0]}</span>
+          <span style="font-weight:600;font-size:12px;color:${r[2]};">${r[1]}</span>
+        </div>`).join('')}
+      </div>
+      <div style="font-size:11px;color:var(--text-3);margin-top:10px;">All degradation-period processing is flagged DEGRADED_MODE in audit log for DPO review on recovery.</div>
+    </div>
+    <div class="card">
+      <div class="label" style="margin-bottom:12px;">Webhook Delivery Status</div>
+      ${[
+        {org:'HDFC Bank',status:'Delivered',attempts:1,time:'42ms'},
+        {org:'LIC India',status:'Delivered',attempts:1,time:'89ms'},
+        {org:'Axis Bank',status:'Failed (attempt 3/5)',attempts:3,time:'—'},
+        {org:'Zepto',status:'Dead Letter Queue',attempts:5,time:'—'},
+      ].map(w=>`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);">
+        <div><div style="font-weight:500;font-size:13px;">${w.org}</div><div style="font-size:11px;color:var(--text-3);">Attempt ${w.attempts}/5</div></div>
+        <div style="text-align:right;"><span class="tag ${w.status==='Delivered'?'tag-green':w.status.includes('Dead')?'tag-red':'tag-orange'}" style="font-size:11px;">${w.status}</span>${w.time!=='—'?`<div style="font-size:11px;color:var(--text-3);margin-top:3px;">${w.time}</div>`:''}</div>
+      </div>`).join('')}
+      <div class="alert alert-warning" style="margin-top:12px;font-size:12px;"><span>⚠️</span><div>Compliance Manager alerted after 3 failed webhook attempts. Dead Letter Queue requires manual intervention.</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="screen-vendor-risk" class="screen">
+  <div class="two-col-6-4">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><div class="label" style="margin:0;">Vendor Risk Heatmap (E-17) — Score × Data Volume</div><div class="tag tag-gray" style="font-size:11px;">Updated weekly</div></div>
+      <div class="risk-grid" style="margin-bottom:16px;">
+        ${[
+          {n:'DigiLocker',s:8,r:'low'},{n:'AWS India',s:12,r:'low'},{n:'Exotel',s:18,r:'low'},
+          {n:'CIBIL',s:23,r:'medium'},{n:'Razorpay',s:21,r:'medium'},{n:'SendGrid',s:31,r:'medium'},
+          {n:'Sarvam AI',s:35,r:'medium'},{n:'CAMS',s:38,r:'medium'},{n:'Finbox',s:42,r:'high'},
+          {n:'Experian',s:45,r:'high'},{n:'DataSync',s:61,r:'high'},{n:'PayU India',s:87,r:'critical'},
+        ].map(v=>`<div class="risk-cell risk-${v.r}"><div class="rc-name">${v.n}</div><div class="rc-score">${v.s}</div></div>`).join('')}
+      </div>
+      <div style="display:flex;gap:12px;font-size:11px;"><span><span class="tag risk-low" style="color:#fff;font-size:10px;">LOW 0–20</span></span><span><span class="tag risk-medium" style="color:#fff;font-size:10px;">MEDIUM 21–40</span></span><span><span class="tag risk-high" style="color:#fff;font-size:10px;">HIGH 41–70</span></span><span><span class="tag risk-critical" style="color:#fff;font-size:10px;">CRITICAL 71–100</span></span></div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="label" style="margin-bottom:10px;">Risk Score Formula</div>
+        ${[['DPA Status','30%'],['Audit Recency','25%'],['Breach History','25%'],['Sub-processor Transparency','10%'],['Data Sensitivity','10%']].map(c=>`<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;"><span>${c[0]}</span><span style="font-weight:600;color:var(--navy);">${c[1]}</span></div>`).join('')}
+        <div style="margin-top:10px;padding:8px;background:#FEF2F2;border-radius:6px;font-size:11px;color:var(--red);">+15 pts added for any non-API data access arrangement (direct DB, SFTP, etc.)</div>
+      </div>
+      <div class="card">
+        <div class="label" style="margin-bottom:8px;">⚠️ Visibility Limitation</div>
+        <div style="font-size:12px;color:var(--text-2);line-height:1.7;">This system can only monitor <strong>API-mediated</strong> data access. Direct database access, SFTP, legacy integrations are <strong>not visible</strong>.<br><br>Compensating control: Annual on-site audit clause is mandatory in all DPA templates.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="screen-minor-consent" class="screen">
+  <div class="two-col">
+    <div class="card">
+      <div class="alert alert-danger"><span class="alert-icon">🔒</span><div><strong>DPDPA §9(3) Enforcement:</strong> Marketing, analytics, profiling, and tracking are BLOCKED for all minor records — regardless of parental consent.</div></div>
+      <div class="section-title" style="margin-top:16px;">Parental Consent Verification (E-18)</div>
+      <div class="field-group"><div class="label">Minor's Date of Birth (Declared)</div><input value="15 Aug 2012" type="text"><div style="font-size:11px;color:var(--text-3);margin-top:4px;">⚠️ DOB is self-declared. System does not verify against government database. This limitation is disclosed in Trust Center.</div></div>
+      <div class="field-group"><div class="label">Parent/Guardian Mobile</div><input value="+91 98765 12345"></div>
+      <div class="field-group"><div class="label">Verification Method</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;">
+          ${[['📄 Document Upload','Mandatory minimum — Aadhaar/PAN/Passport upload + OCR + manual review within 2h'],['🔢 Aadhaar OTP','Higher assurance — UIDAI AUA registered (pending OQ-18)']].map((v,i)=>`
+          <div style="border:2px solid ${i===0?'var(--teal)':'var(--border)'};border-radius:10px;padding:14px;cursor:pointer;background:${i===0?'#F0FDFA':'#fff'};">
+            <div style="font-size:16px;margin-bottom:6px;">${v[0].split(' ')[0]}</div>
+            <div style="font-size:13px;font-weight:500;">${v[0].split(' ').slice(1).join(' ')}</div>
+            <div style="font-size:11px;color:var(--text-2);margin-top:4px;">${v[1]}</div>
+          </div>`).join('')}
+        </div>
+      </div>
+      <div class="field-group"><div class="label">Document Upload (Aadhaar/PAN/Passport)</div><div style="border:2px dashed var(--border);border-radius:10px;padding:24px;text-align:center;cursor:pointer;"><div style="font-size:24px;margin-bottom:8px;">📎</div><div style="font-size:13px;font-weight:500;">Drop document here or tap to upload</div><div style="font-size:11px;color:var(--text-3);margin-top:4px;">PDF, JPG, PNG · Max 5MB · Encrypted in transit</div></div></div>
+      <button class="btn btn-teal btn-full">Submit for Verification →</button>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="label" style="margin-bottom:12px;">Verification Timeline</div>
+        <div class="timeline" style="padding-left:20px;">
+          <div class="timeline-item"><div class="timeline-dot" style="background:var(--teal);"></div><div class="timeline-title">Documents Submitted</div><div class="timeline-sub">Day 0 — Parent notified</div></div>
+          <div class="timeline-item"><div class="timeline-dot" style="background:var(--navy);box-shadow:0 0 0 4px rgba(27,58,107,0.2);"></div><div class="timeline-title">KYC Review (in progress)</div><div class="timeline-sub">SLA: Within 2 business hours</div></div>
+          <div class="timeline-item"><div class="timeline-dot" style="background:var(--border);"></div><div class="timeline-title">Verification Complete</div><div class="timeline-sub">Consent activated for minor</div></div>
+          <div class="timeline-item" style="border-left-color:transparent;"><div class="timeline-dot" style="background:var(--border);"></div><div class="timeline-title">Expires if not verified</div><div class="timeline-sub">Day 14 — Reminder Day 3, 7, 12</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="label" style="margin-bottom:10px;">Purposes Blocked for Minors (DPDPA §9(3))</div>
+        ${['Marketing & Advertising','Behavioural Analytics','Profiling & Scoring','Tracking & Targeting','Cross-sell Offers'].map(p=>`<div style="display:flex;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;"><span style="color:var(--red);font-size:16px;">🚫</span><span>${p}</span></div>`).join('')}
+        <div style="font-size:11px;color:var(--text-3);margin-top:8px;">These are blocked at API AND form builder level. Cannot be shown or enabled for is_minor records.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="screen-anomaly-detection" class="screen">
+  <div class="stats-row" style="margin-bottom:20px;">
+    <div class="stat-card"><div class="stat-label">Anomalies Detected (7d)</div><div class="stat-num" style="color:var(--orange);">7</div><div class="stat-sub">2 HIGH · 5 MEDIUM</div></div>
+    <div class="stat-card"><div class="stat-label">False Positive Rate</div><div class="stat-num" style="color:var(--green);">8.3%</div><div class="stat-sub">Target: &lt;10% ✓</div></div>
+    <div class="stat-card"><div class="stat-label">Model Status</div><div class="stat-num" style="color:var(--teal);font-size:20px;">Active</div><div class="stat-sub">Calibrated Mar 8 2026</div></div>
+    <div class="stat-card"><div class="stat-label">KL Divergence</div><div class="stat-num">0.18</div><div class="stat-sub">Threshold: 0.3 ✓ stable</div></div>
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <div class="label" style="margin-bottom:12px;">Recent Anomaly Alerts</div>
+      ${[
+        {type:'Acceptance Rate Drop',sev:'HIGH',detail:'Marketing form: 91% → 28% acceptance in 2 hours (form rendering issue suspected)',time:'2h ago',flag:'RF-H12 raised'},
+        {type:'Admin Access Pattern',sev:'HIGH',detail:'User anjali.gupta accessed 4,200 records in 8 min (3.2σ above her 90-day baseline)',time:'6h ago',flag:'RF-H13 raised'},
+        {type:'Withdrawal Spike',sev:'MEDIUM',detail:'18% withdrawal rate on HDFC Bank (normally 2.1%) — 5 consecutive minutes',time:'1d ago',flag:'Under review'},
+      ].map(a=>`
+      <div class="card card-sm flag-${a.sev.toLowerCase()}" style="margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-weight:600;font-size:13px;">${a.type}</span><span class="tag ${a.sev==='HIGH'?'tag-orange':'tag-blue'}" style="font-size:10px;">${a.sev}</span></div>
+        <div style="font-size:12px;color:var(--text-2);margin-bottom:6px;">${a.detail}</div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-3);"><span>${a.time}</span><span class="tag tag-gray" style="font-size:10px;">${a.flag}</span></div>
+      </div>`).join('')}
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="label" style="margin-bottom:12px;">Model Architecture</div>
+        ${[['Primary Model','Isolation Forest (tabular anomalies)'],['Temporal Model','CUSUM (trend-based drift)'],['Rule Engine','Zero acceptance, §9(3) violation (deterministic)'],['Baseline','Per-user 90-day rolling window'],['Cold Start','Industry-segment benchmarks (until 90-day mark)'],['Drift Detection','KL Divergence weekly · Auto-recalibrate if >0.3 for 2 weeks']].map(m=>`
+        <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;"><span style="font-weight:500;color:var(--navy);width:120px;flex-shrink:0;">${m[0]}</span><span style="color:var(--text-2);">${m[1]}</span></div>`).join('')}
+      </div>
+      <div class="card">
+        <div class="label" style="margin-bottom:8px;">Admin Access — Per-User Baseline (E-19 C142 Fix)</div>
+        <div style="font-size:12px;color:var(--text-2);margin-bottom:12px;">Each admin has their own behavioural baseline — not universal office-hours rules</div>
+        ${[['anjali.gupta','Peak: 7–19 IST weekdays · Avg 400 records/session','ANOMALY today (4,200 in 8 min)','var(--red)'],['rajan.mehta','Peak: 9–21 IST (BFSI 24/7) · Avg 120 records/session','Normal','var(--green)'],['dev.team','Any hours (engineers) · Avg 50 API calls/hour','Normal','var(--green)']].map(u=>`
+        <div style="padding:10px 0;border-bottom:1px solid var(--border);">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;"><span class="mono" style="font-size:12px;font-weight:500;">${u[0]}</span><span class="tag" style="background:${u[2]==='Normal'?'#DCFCE7':'#FEE2E2'};color:${u[2]==='Normal'?'var(--green)':'var(--red)'};font-size:10px;">${u[2]}</span></div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:3px;">${u[1]}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>
+</div>
+
+  </div><!-- #content -->
+</div><!-- #main -->
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const screenMeta = {
+  'widget-notice':     { label: 'E-09: Consent Form — Notice & Plain Language', badge: 'badge-widget', title: '🧾 Consent Form' },
+  'widget-purposes':   { label: 'E-01, E-09: Purpose Selection', badge: 'badge-widget', title: '🧾 Consent Form' },
+  'widget-channels':   { label: 'E-01: Channel Selection', badge: 'badge-widget', title: '🧾 Consent Form' },
+  'widget-review':     { label: 'E-01: Review & Confirm', badge: 'badge-widget', title: '🧾 Consent Form' },
+  'widget-success':    { label: 'E-01: Consent Success State', badge: 'badge-widget', title: '🧾 Consent Form' },
+  'c-login':           { label: 'E-02: Consumer Login (OTP)', badge: 'badge-consumer', title: '👤 Consumer Portal' },
+  'c-otp':             { label: 'E-02 §3.1: OTP Entry — NEW (F-001 fix)', badge: 'badge-consumer', title: '👤 Consumer Portal' },
+  'c-dashboard':       { label: 'E-02: Consumer Dashboard', badge: 'badge-consumer', title: '👤 Consumer Portal' },
+  'c-consents':        { label: 'E-02: My Consents', badge: 'badge-consumer', title: '👤 Consumer Portal' },
+  'c-withdraw':        { label: 'E-02, E-01: Withdrawal Flow', badge: 'badge-consumer', title: '👤 Consumer Portal' },
+  'c-rights':          { label: 'E-03: Data Rights Request', badge: 'badge-consumer', title: '👤 Consumer Portal' },
+  'c-tracker':         { label: 'E-03: Rights Request Tracker', badge: 'badge-consumer', title: '👤 Consumer Portal' },
+  'c-prefs':           { label: 'E-02, E-14: Preferences & Accessibility', badge: 'badge-consumer', title: '👤 Consumer Portal' },
+  'org-signup':        { label: 'E-06: Organisation Signup', badge: 'badge-admin', title: '🏢 Org Admin' },
+  'org-wizard':        { label: 'E-06: Setup Wizard (5 Steps)', badge: 'badge-admin', title: '🏢 Org Admin' },
+  'org-dashboard':     { label: 'E-05: Analytics Dashboard', badge: 'badge-admin', title: '🏢 Org Admin' },
+  'form-builder':      { label: 'E-01: Consent Form Builder', badge: 'badge-admin', title: '🏢 Org Admin' },
+  'purpose-registry':  { label: 'E-01: Purpose Master Registry', badge: 'badge-admin', title: '🏢 Org Admin' },
+  'batch-ops':         { label: 'E-01: Batch Consent Operations', badge: 'badge-admin', title: '🏢 Org Admin' },
+  'api-keys':          { label: 'E-06, E-09: API Keys & RBAC', badge: 'badge-admin', title: '🏢 Org Admin' },
+  'dpo-dashboard':     { label: 'E-04, E-05, E-13: DPO Dashboard', badge: 'badge-dpo', title: '🛡 DPO Portal' },
+  'red-flags':         { label: 'E-08: Red Flag Queue (28 flags)', badge: 'badge-dpo', title: '🛡 DPO Portal' },
+  'red-flag-detail':   { label: 'E-08: Red Flag Detail', badge: 'badge-dpo', title: '🛡 DPO Portal' },
+  'processors':        { label: 'E-07: Processor Registry', badge: 'badge-dpo', title: '🛡 DPO Portal' },
+  'dpa-lifecycle':     { label: 'E-07: DPA Lifecycle Management', badge: 'badge-dpo', title: '🛡 DPO Portal' },
+  'audit-trail':       { label: 'E-04: Audit Trail & Immutable Log', badge: 'badge-dpo', title: '🛡 DPO Portal' },
+  'audit-log-detail':  { label: 'E-04 §3.1: Audit Log Event Detail — NEW', badge: 'badge-dpo', title: '🛡 DPO Portal' },
+  'rights-queue':      { label: 'E-03: Rights Request Queue', badge: 'badge-dpo', title: '🛡 DPO Portal' },
+  'dpo-4eyes':         { label: 'E-13: 4-Eyes Approval Workflow', badge: 'badge-dpo', title: '🛡 DPO Portal' },
+  'sms-flow':          { label: 'E-11: SMS Consent Capture', badge: 'badge-phase2', title: '🌐 Multi-Channel' },
+  'ivr-flow':          { label: 'E-11: IVR Consent Transcript', badge: 'badge-phase2', title: '🌐 Multi-Channel' },
+  'whatsapp-flow':     { label: 'E-11: WhatsApp Consent Flow', badge: 'badge-phase2', title: '🌐 Multi-Channel' },
+  'branch-flow':       { label: 'E-11: In-Branch Tablet (Offline)', badge: 'badge-phase2', title: '🌐 Multi-Channel' },
+  'health-score':      { label: 'E-12: Consent Health Score', badge: 'badge-phase2', title: '📈 Analytics' },
+  'compliance-report': { label: 'E-12, E-13: Annual DPDPA Report', badge: 'badge-phase2', title: '📈 Analytics' },
+  'ai-recommendations':{ label: 'E-15: AI Consent Recommendations', badge: 'badge-phase3', title: '🤖 Phase 3 — AI' },
+  'enforcement-api':   { label: 'E-16: Automated Consent Enforcement', badge: 'badge-phase3', title: '🤖 Phase 3 — AI' },
+  'vendor-risk':       { label: 'E-17: Vendor Risk Heatmap', badge: 'badge-phase3', title: '🤖 Phase 3 — AI' },
+  'minor-consent':     { label: 'E-18: Minor Consent Verification', badge: 'badge-phase3', title: '🤖 Phase 3 — AI' },
+  'anomaly-detection': { label: 'E-19: AI Anomaly Detection', badge: 'badge-phase3', title: '🤖 Phase 3 — AI' },
+};
+
+let current = null;
+
+function go(id) {
+  if (current) {
+    const old = document.getElementById('screen-' + current);
+    if (old) old.classList.remove('active');
+    const oldNav = document.querySelector('.nav-item.active');
+    if (oldNav) oldNav.classList.remove('active');
+  }
+  const screen = document.getElementById('screen-' + id);
+  if (screen) screen.classList.add('active');
+  const meta = screenMeta[id] || {};
+  document.getElementById('screen-label').textContent = meta.label || id;
+  const badge = document.getElementById('journey-badge');
+  badge.textContent = meta.title || '';
+  badge.className = 'journey-badge ' + (meta.badge || '');
+  // highlight nav
+  document.querySelectorAll('.nav-item').forEach(el => {
+    
